@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  SCHOOL_ADMIN
+  TEACHER
+  STUDENT
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  school   School? @relation(fields: [schoolId], references: [id])
+  schoolId String?
+
+  // User can be both teacher and student in different schools (uncommon but possible)
+  teacherProfile Teacher?
+  studentProfile Student?
+
+  @@unique([email, schoolId])
+}
+
+model School {
+  id        String   @id @default(uuid())
+  name      String
+  address   String?
+  phone     String?
+  email     String?
+  website   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users    User[]
+  teachers Teacher[]
+  students Student[]
+}
+
+model Teacher {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id])
+}
+
+model Student {
+  id         String   @id @default(uuid())
+  studentId  String   @unique // School-specific student ID
+  gradeLevel String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id])
+}
