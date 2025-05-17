@@ -8,6 +8,7 @@ export function HeaderHeading() {
 
     function getHeadingText(pathname: string) {
         if (pathname === '/profile') return 'Profile';
+        if (pathname === '/challenges') return 'Challenges';
     }
 
     return (

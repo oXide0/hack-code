@@ -97,7 +97,7 @@ export function LoginForm() {
                 )}
             </Field.Root>
 
-            <Button type='submit' bg='#2ECC71' width='full' loading={isLoading} loadingText='Signing in...' mb={4}>
+            <Button type='submit' bg='green.300' width='full' loading={isLoading} loadingText='Signing in...' mb={4}>
                 Sign in
             </Button>
 

@@ -1,15 +1,8 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
+import { HeaderDropdown } from './header-dropdown';
 import { HeaderHeading } from './heading';
 
-interface HeaderProps {
-    readonly user: {
-        fullName: string;
-        level: string;
-        avatarUrl: string;
-    };
-}
-
-export function Header({ user }: HeaderProps) {
+export async function Header({ username }: { username: string }) {
     return (
         <Box
             position='fixed'
@@ -41,10 +34,13 @@ export function Header({ user }: HeaderProps) {
                     gap={2}
                     fontSize='xl'
                     fontWeight='medium'
+                    h='56px'
                 >
                     <Text>💠</Text>
-                    <Text>LVL - {user.level}</Text>
+                    <Text>LVL - 1</Text>
                 </Flex>
+
+                <HeaderDropdown username={username} />
             </Flex>
         </Box>
     );
