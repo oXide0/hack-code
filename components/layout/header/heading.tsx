@@ -7,8 +7,10 @@ export function HeaderHeading() {
     const pathname = usePathname();
 
     function getHeadingText(pathname: string) {
+        if (pathname === '') return 'Languages';
         if (pathname === '/profile') return 'Profile';
         if (pathname === '/challenges') return 'Challenges';
+        return pathname.split('/').pop()?.replace(/-/g, ' ');
     }
 
     return (

@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
-import { HeaderDropdown } from './header-dropdown';
+import { HeaderDropdown } from './dropdown';
 import { HeaderHeading } from './heading';
 
 export async function Header({ username }: { username: string }) {

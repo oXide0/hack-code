@@ -1,9 +1,18 @@
-import { getUserById } from '@/queries/route';
+import { prisma } from '@/lib/prisma';
 import { Avatar, Badge, Box, Card, Flex, Heading, Text, VStack } from '@chakra-ui/react';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const user = await getUserById(id);
+    const user = await prisma.user.findUniqueOrThrow({
+        where: { id },
+        select: {
+            firstName: true,
+            lastName: true,
+            email: true,
+            createdAt: true,
+            school: { select: { name: true } }
+        }
+    });
 
     return (
         <Box pt={2}>
