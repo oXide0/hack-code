@@ -28,6 +28,6 @@ export async function useIdentity() {
     if (session == null || session.user == null) {
         return notFound();
     }
-
-    return getUserById(session.user.id);
+    console.log('session.user.email', session.user.email);
+    return getUserById('');
 }

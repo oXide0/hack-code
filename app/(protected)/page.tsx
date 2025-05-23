@@ -1,27 +1,11 @@
-import { LanguageCard } from '@/components/core/language-card';
+import { CourseCard } from '@/components/core/course-card';
+import { prisma } from '@/lib/prisma';
 import { Box, Container, Grid, Heading, Text, VStack } from '@chakra-ui/react';
+import Link from 'next/link';
 
-export type ProgrammingLanguage = {
-    name: string;
-    description: string;
-    icon: string;
-    slug: string;
-    enabled: boolean;
-};
+export default async function Page() {
+    const courses = await prisma.course.findMany({ select: { id: true, title: true, description: true } });
 
-const programmingLanguages: ProgrammingLanguage[] = [
-    { name: 'JavaScript', description: 'Web Development', icon: '🟨', slug: 'javascript', enabled: false },
-    { name: 'Python', description: 'AI & Data Science', icon: '🐍', slug: 'python', enabled: true },
-    { name: 'Java', description: 'Enterprise Applications', icon: '☕', slug: 'java', enabled: false },
-    { name: 'C#', description: 'Game Development', icon: '🎮', slug: 'csharp', enabled: false },
-    { name: 'Ruby', description: 'Web Applications', icon: '💎', slug: 'ruby', enabled: false },
-    { name: 'PHP', description: 'Web Backend', icon: '🐘', slug: 'php', enabled: false },
-    { name: 'Swift', description: 'iOS Development', icon: '🍎', slug: 'swift', enabled: false },
-    { name: 'C++', description: 'High-Performance Apps', icon: '🔧', slug: 'cpp', enabled: false },
-    { name: 'Rust', description: 'Systems Programming', icon: '🦀', slug: 'rust', enabled: false }
-];
-
-export default function Page() {
     return (
         <Box minH='100vh' p={5}>
             <Container maxW='6xl'>
@@ -30,7 +14,7 @@ export default function Page() {
                         Hey coders!
                     </Heading>
                     <Text fontSize='lg' color='gray.300'>
-                        Explore the languages and gain the highest level!
+                        Explore the courses and gain the highest level!
                     </Text>
                 </VStack>
 
@@ -42,8 +26,10 @@ export default function Page() {
                     }}
                     gap={6}
                 >
-                    {programmingLanguages.map((language) => (
-                        <LanguageCard key={language.slug} language={language} />
+                    {courses.map((course) => (
+                        <Link key={course.id} href={`courses/${course.id}`}>
+                            <CourseCard title={course.title} description={course.description} />
+                        </Link>
                     ))}
                 </Grid>
             </Container>

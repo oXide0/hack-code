@@ -47,24 +47,24 @@ export const authOptions: NextAuthOptions = {
             }
         })
     ],
-    callbacks: {
-        async jwt({ token, user }) {
-            if (user) {
-                token.id = user.id;
-                token.role = user.role;
-                token.exp = Math.floor(Date.now() / 1000) + 30 * 60;
-            }
-            return token;
-        },
-        async session({ session, token }) {
-            if (token) {
-                session.user.id = token.id;
-                session.user.role = token.role;
-                session.expires = new Date(Date.now() + 30 * 60 * 1000).toISOString();
-            }
-            return session;
-        }
-    },
+    // callbacks: {
+    //     async jwt({ token, user }) {
+    //         if (user) {
+    //             token.id = user.id;
+    //             token.role = user.role;
+    //             token.exp = Math.floor(Date.now() / 1000) + 30 * 60;
+    //         }
+    //         return token;
+    //     },
+    //     async session({ session, token }) {
+    //         if (token) {
+    //             session.user.id = token.id;
+    //             session.user.role = token.role;
+    //             session.expires = new Date(Date.now() + 30 * 60 * 1000).toISOString();
+    //         }
+    //         return session;
+    //     }
+    // },
     session: {
         strategy: 'jwt',
         maxAge: 24 * 60 * 60 // 1 day

@@ -28,7 +28,7 @@ export function LoginForm() {
             const result = await signIn('credentials', {
                 ...data,
                 redirect: true,
-                callbackUrl: '/profile'
+                callbackUrl: '/'
             });
 
             if (result?.error) {

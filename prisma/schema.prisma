@@ -80,3 +80,63 @@ model Student {
   schoolId String
   school   School @relation(fields: [schoolId], references: [id])
 }
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sections Section[]
+}
+
+model Section {
+  id          String  @id @default(uuid())
+  title       String
+  description String
+  order       Int
+  isCompleted Boolean
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  topics Topic[]
+}
+
+enum TopicType {
+  THEORY
+  PRACTICE
+}
+
+model Topic {
+  id          String    @id @default(uuid())
+  title       String
+  order       Int
+  isCompleted Boolean
+  type        TopicType
+
+  sectionId String
+  section   Section @relation(fields: [sectionId], references: [id])
+
+  theoryTopic   TheoryTopic?
+  practiceTopic PracticeTopic?
+}
+
+model TheoryTopic {
+  id         String  @id @default(uuid())
+  question   String
+  codeSample String?
+
+  topicId String @unique
+  topic   Topic  @relation(fields: [topicId], references: [id])
+}
+
+model PracticeTopic {
+  id          String  @id @default(uuid())
+  task        String
+  starterCode String?
+
+  topicId String @unique
+  topic   Topic  @relation(fields: [topicId], references: [id])
+}
