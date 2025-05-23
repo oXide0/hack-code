@@ -1,8 +1,7 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { toaster } from '@/components/ui/toaster';
-import { Field, IconButton, Input, InputGroup, Text } from '@chakra-ui/react';
+import { Button, Field, IconButton, Input, InputGroup, Text } from '@chakra-ui/react';
 import { Eye, EyeOff } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
@@ -28,7 +27,7 @@ export function LoginForm() {
             const result = await signIn('credentials', {
                 ...data,
                 redirect: true,
-                callbackUrl: '/'
+                callbackUrl: '/courses'
             });
 
             if (result?.error) {

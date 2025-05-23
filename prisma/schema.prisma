@@ -106,6 +106,7 @@ model Section {
 
 enum TopicType {
   THEORY
+  VALIDATION
   PRACTICE
 }
 
@@ -119,23 +120,48 @@ model Topic {
   sectionId String
   section   Section @relation(fields: [sectionId], references: [id])
 
-  theoryTopic   TheoryTopic?
-  practiceTopic PracticeTopic?
+  theoryTopics     TheoryTopic[]
+  validationTopics ValidationTopic[]
+  practiceTopics   PracticeTopic[]
 }
 
 model TheoryTopic {
-  id         String  @id @default(uuid())
-  question   String
-  codeSample String?
+  id          String  @id @default(uuid())
+  question    String
+  codeSample  String?
+  isCompleted Boolean
 
   topicId String @unique
   topic   Topic  @relation(fields: [topicId], references: [id])
 }
 
-model PracticeTopic {
+model ValidationTopic {
   id          String  @id @default(uuid())
   task        String
   starterCode String?
+  isCompleted Boolean
+
+  topicId String @unique
+  topic   Topic  @relation(fields: [topicId], references: [id])
+
+  validationAnswer ValidationAnswer[]
+}
+
+model ValidationAnswer {
+  id      String @id @default(uuid())
+  content String
+
+  validationTopicId String
+  validationTopic   ValidationTopic @relation(fields: [validationTopicId], references: [id])
+
+  @@index([validationTopicId])
+}
+
+model PracticeTopic {
+  id          String  @id @default(uuid())
+  task        String
+  starterCode String
+  isCompleted Boolean
 
   topicId String @unique
   topic   Topic  @relation(fields: [topicId], references: [id])

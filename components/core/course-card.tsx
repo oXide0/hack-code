@@ -1,4 +1,4 @@
-import { Box, Heading, Text, VStack } from '@chakra-ui/react';
+import { Avatar, Card, Heading, Text } from '@chakra-ui/react';
 
 interface CourseCardProps {
     readonly title: string;
@@ -7,12 +7,12 @@ interface CourseCardProps {
 
 export function CourseCard({ title, description }: CourseCardProps) {
     return (
-        <Box
-            p={6}
+        <Card.Root
+            variant='outline'
+            width='100%'
+            borderColor='green.400'
             bg='gray.800'
             borderRadius='2xl'
-            border='1px solid'
-            borderColor='green.400'
             boxShadow='lg'
             transition='all 0.3s ease'
             _hover={{
@@ -23,17 +23,21 @@ export function CourseCard({ title, description }: CourseCardProps) {
             }}
             role='group'
         >
-            <VStack gap={3} align='start'>
-                <Heading as='h3' size='md' color='green.300' _groupHover={{ color: 'green.200' }}>
+            <Card.Body gap={3} alignItems='start'>
+                <Avatar.Root size='sm' bg='green.400' color='white'>
+                    <Avatar.Fallback name={title[0]} />
+                </Avatar.Root>
+
+                <Heading as={Card.Title} size='md' color='green.300' _groupHover={{ color: 'green.200' }}>
                     {title}
                 </Heading>
 
                 {description && (
-                    <Text color='gray.300' fontSize='sm'>
+                    <Text as={Card.Description} color='gray.300' fontSize='sm'>
                         {description}
                     </Text>
                 )}
-            </VStack>
-        </Box>
+            </Card.Body>
+        </Card.Root>
     );
 }

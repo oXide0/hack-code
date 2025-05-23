@@ -19,9 +19,9 @@ export default async function Layout({ params, children }: LayoutProps) {
     const { completenessPercentage, completedItems, totalItems } = calculateCourseCompleteness(course.sections);
 
     return (
-        <Box>
+        <Stack gap='28px'>
             <Subheader
-                path={courseId}
+                path='/courses'
                 centerItem={<Heading>{course.title}</Heading>}
                 linkLabel='Back to courses'
                 isBorder
@@ -44,6 +44,6 @@ export default async function Layout({ params, children }: LayoutProps) {
                 }
             />
             {children}
-        </Box>
+        </Stack>
     );
 }

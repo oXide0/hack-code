@@ -1,6 +1,7 @@
 import { TopicCard } from '@/components/core/topic-card';
 import { prisma } from '@/lib/prisma';
-import { Container, Heading, Text } from '@chakra-ui/react';
+import { Container, Heading, Text, Badge } from '@chakra-ui/react';
+import Link from 'next/link';
 
 export default async function Page({ params }: { params: Promise<{ sectionId: string }> }) {
     const { sectionId } = await params;
@@ -12,17 +13,17 @@ export default async function Page({ params }: { params: Promise<{ sectionId: st
     return (
         <Container maxW='2xl'>
             <Heading>{section.title}</Heading>
-            <Text>{section.description}</Text>
+            <Text color='gray.300'>{section.description}</Text>
             {section.topics.map((topic, index) => (
-                <TopicCard
-                    key={topic.id}
-                    number={`0${index}`}
-                    title={topic.title}
-                    linkPath=''
-                    rightElement={<></>}
-                    badge={<></>}
-                    isActive
-                />
+                <Link key={topic.id} href={`${sectionId}/topics/${topic.id}`}>
+                    <TopicCard
+                        number={`0${index}`}
+                        title={topic.title}
+                        rightElement={<></>}
+                        badge={<Badge colorPalette='green'>Learn</Badge>}
+                        isActive
+                    />
+                </Link>
             ))}
         </Container>
     );

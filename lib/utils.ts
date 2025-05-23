@@ -13,3 +13,7 @@ export function calculateCourseCompleteness(items: Array<{ isCompleted: boolean 
         completenessPercentage
     };
 }
+
+export function call(fn: (...args: any[]) => any, ...args: Parameters<typeof fn>): ReturnType<typeof fn> {
+    return fn(...args);
+}

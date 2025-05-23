@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 import { authOptions } from './lib/auth';
 
 const PUBLIC_ROUTES = ['/login'];
-const PROTECTED_ROUTES = ['/dashboard', '/profile'];
+const PROTECTED_ROUTES = ['/courses', '/profile'];
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -20,12 +20,11 @@ export async function middleware(request: NextRequest) {
 
     if (isProtectedRoute && !token) {
         const loginUrl = new URL('/login', request.url);
-        loginUrl.searchParams.set('callbackUrl', pathname);
         return NextResponse.redirect(loginUrl);
     }
 
     if (isPublicRoute && token) {
-        return NextResponse.redirect(new URL('/dashboard', request.url));
+        return NextResponse.redirect(new URL('/courses', request.url));
     }
 
     return NextResponse.next();

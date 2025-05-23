@@ -94,10 +94,11 @@ export async function seedCourses() {
                                     order: 1,
                                     isCompleted: false,
                                     type: 'THEORY',
-                                    theoryTopic: {
+                                    theoryTopics: {
                                         create: {
                                             question: "Explain what Python is and what it's used for.",
-                                            codeSample: `# Example Python code\nprint("Hello, world!")`
+                                            codeSample: `# Example Python code\nprint("Hello, world!")`,
+                                            isCompleted: false
                                         }
                                     }
                                 }
@@ -116,11 +117,12 @@ export async function seedCourses() {
                                     order: 1,
                                     isCompleted: false,
                                     type: 'THEORY',
-                                    theoryTopic: {
+                                    theoryTopics: {
                                         create: {
                                             question:
                                                 'What are variables in Python? Provide examples of different data types.',
-                                            codeSample: `x = 5  # integer\ny = "hello"  # string\nz = 3.14  # float`
+                                            codeSample: `x = 5  # integer\ny = "hello"  # string\nz = 3.14  # float`,
+                                            isCompleted: false
                                         }
                                     }
                                 },
@@ -129,10 +131,11 @@ export async function seedCourses() {
                                     order: 2,
                                     isCompleted: false,
                                     type: 'PRACTICE',
-                                    practiceTopic: {
+                                    practiceTopics: {
                                         create: {
                                             task: 'Declare a variable called `name` and assign your name to it. Then print it.',
-                                            starterCode: `# Your code here\n`
+                                            starterCode: `# Your code here\n`,
+                                            isCompleted: false
                                         }
                                     }
                                 }
