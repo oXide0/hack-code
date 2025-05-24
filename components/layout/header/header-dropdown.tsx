@@ -6,20 +6,17 @@ import { signOut } from 'next-auth/react';
 import { useRef, useState } from 'react';
 
 export function HeaderDropdown({ username }: { readonly username: string }) {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
 
     return (
         <Box position='relative' ref={dropdownRef}>
             <Flex
-                h='56px'
                 px={2}
+                py={2}
                 bg='gray.700'
                 borderRadius='xl'
-                outline='1px solid'
-                outlineColor='gray.500'
-                outlineOffset='-1px'
-                justify='start'
+                border='1px solid gray'
                 align='center'
                 gap={2.5}
                 cursor='pointer'

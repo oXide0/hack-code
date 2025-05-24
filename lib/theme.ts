@@ -3,7 +3,8 @@ import { createSystem, defineConfig, defaultConfig } from '@chakra-ui/react';
 const config = defineConfig({
     globalCss: {
         body: {
-            bg: '#1C1C1C'
+            bg: '#1C1C1C',
+            fontFamily: 'var(--font-poppins), sans-serif'
         }
     },
     theme: {
@@ -12,6 +13,16 @@ const config = defineConfig({
                 green: {
                     300: { value: '#2ECC71' }
                 }
+            },
+            fonts: {
+                heading: { value: 'var(--font-poppins), sans-serif' },
+                body: { value: 'var(--font-poppins), sans-serif' }
+            }
+        },
+        semanticTokens: {
+            fonts: {
+                heading: { value: 'var(--font-poppins), sans-serif' },
+                body: { value: 'var(--font-poppins), sans-serif' }
             }
         }
     }

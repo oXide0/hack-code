@@ -1,11 +1,11 @@
 'use client';
 
 import { toaster } from '@/components/ui/toaster';
-import { Button, Field, IconButton, Input, InputGroup, Text } from '@chakra-ui/react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Button, Field, Input, Text } from '@chakra-ui/react';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { PasswordInput } from '../ui/password-input';
 
 type LoginFormInputs = {
     email: string;
@@ -13,8 +13,7 @@ type LoginFormInputs = {
 };
 
 export function LoginForm() {
-    const [showPassword, setShowPassword] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const {
         register,
         handleSubmit,
@@ -62,38 +61,17 @@ export function LoginForm() {
                     placeholder='your@email.com'
                     {...register('email', { required: 'Email is required' })}
                 />
-                {errors.email && (
-                    <Text color='red.400' fontSize='sm'>
-                        {errors.email.message}
-                    </Text>
-                )}
+                {errors.email && <Field.ErrorText>{errors.email.message}</Field.ErrorText>}
             </Field.Root>
 
             <Field.Root mb={6}>
                 <Field.Label>Password</Field.Label>
-                <InputGroup
-                    endElement={
-                        <IconButton
-                            aria-label={showPassword ? 'Hide password' : 'Show password'}
-                            variant='ghost'
-                            onClick={() => setShowPassword(!showPassword)}
-                        >
-                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                        </IconButton>
-                    }
-                >
-                    <Input
-                        variant='subtle'
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder='••••••••'
-                        {...register('password', { required: 'Password is required' })}
-                    />
-                </InputGroup>
-                {errors.password && (
-                    <Text color='red.400' fontSize='sm'>
-                        {errors.password.message}
-                    </Text>
-                )}
+                <PasswordInput
+                    variant='subtle'
+                    placeholder='••••••••'
+                    {...register('password', { required: 'Password is required' })}
+                />
+                {errors.password && <Field.ErrorText>{errors.password.message}</Field.ErrorText>}
             </Field.Root>
 
             <Button type='submit' bg='green.300' width='full' loading={isLoading} loadingText='Signing in...' mb={4}>

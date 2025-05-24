@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Center, Flex, Separator } from '@chakra-ui/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ReactNode } from 'react';
@@ -10,7 +10,8 @@ interface SidebarProps {
 
 export function Sidebar({ items }: SidebarProps) {
     return (
-        <Box
+        <Flex
+            direction='column'
             bg='gray.800'
             borderWidth='2px'
             borderColor='gray.700'
@@ -21,16 +22,16 @@ export function Sidebar({ items }: SidebarProps) {
             h='calc(100vh - 24px)'
             position='fixed'
             zIndex='sticky'
-            display='flex'
-            flexDirection='column'
         >
-            <Flex justify='center' borderBottom='2px solid' borderColor='gray.700' pb={4}>
-                <Link href='/' passHref>
+            <Link href='/'>
+                <Center>
                     <Image src='/logo.svg' height={30} width={184} alt='logo' priority />
-                </Link>
-            </Flex>
+                </Center>
+            </Link>
+
+            <Separator borderColor='gray.700' size='md' mt={4.5} />
 
             <SidebarNavigation items={items} />
-        </Box>
+        </Flex>
     );
 }

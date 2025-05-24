@@ -24,6 +24,7 @@ export default async function Page({ params }: { params: Promise<{ topicId: stri
                                     where: { id: item.id },
                                     data: { isCompleted: true }
                                 });
+                                await updateTopicCompleteness(topicId);
                             }}
                             label={item.question}
                         />
@@ -38,6 +39,7 @@ export default async function Page({ params }: { params: Promise<{ topicId: stri
                                     where: { id: item.id },
                                     data: { isCompleted: true }
                                 });
+                                await updateTopicCompleteness(topicId);
                             }}
                             label={item.task}
                         />
@@ -52,6 +54,7 @@ export default async function Page({ params }: { params: Promise<{ topicId: stri
                                     where: { id: item.id },
                                     data: { isCompleted: true }
                                 });
+                                await updateTopicCompleteness(topicId);
                             }}
                             label={item.task}
                         />
@@ -60,4 +63,41 @@ export default async function Page({ params }: { params: Promise<{ topicId: stri
             })}
         </div>
     );
+}
+
+export async function updateTopicCompleteness(id: string) {
+    const topic = await prisma.topic.findUniqueOrThrow({
+        where: { id },
+        select: {
+            type: true,
+            practiceTopics: true,
+            theoryTopics: true,
+            validationTopics: true
+        }
+    });
+
+    if (topic.type === 'THEORY') {
+        if (topic.theoryTopics.every((item) => item.isCompleted)) {
+            await prisma.topic.update({
+                where: { id },
+                data: { isCompleted: true }
+            });
+        }
+    }
+    if (topic.type === 'VALIDATION') {
+        if (topic.validationTopics.every((item) => item.isCompleted)) {
+            await prisma.topic.update({
+                where: { id },
+                data: { isCompleted: true }
+            });
+        }
+    }
+    if (topic.type === 'PRACTICE') {
+        if (topic.practiceTopics.every((item) => item.isCompleted)) {
+            await prisma.topic.update({
+                where: { id },
+                data: { isCompleted: true }
+            });
+        }
+    }
 }

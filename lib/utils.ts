@@ -1,4 +1,4 @@
-export function calculateCourseCompleteness(items: Array<{ isCompleted: boolean }>): {
+export function calculateCompleteness(items: Array<{ isCompleted: boolean }>): {
     totalItems: number;
     completedItems: number;
     completenessPercentage: number;

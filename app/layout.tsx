@@ -1,12 +1,13 @@
+import { Provider } from '@/components/ui/provider';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import { ReactNode } from 'react';
-import { Provider } from '@/components/ui/provider';
 
 const poppins = Poppins({
     weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
     subsets: ['latin'],
-    variable: '--font-poppins'
+    variable: '--font-poppins',
+    display: 'swap'
 });
 
 export const metadata: Metadata = {

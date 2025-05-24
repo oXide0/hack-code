@@ -1,30 +1,26 @@
 import { SectionCard } from '@/components/core/section-card';
 import { prisma } from '@/lib/prisma';
-import { Flex, Stack } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
+import Link from 'next/link';
 
 export default async function Page({ params }: { params: Promise<{ courseId: string }> }) {
     const { courseId } = await params;
     const course = await prisma.course.findUniqueOrThrow({
         where: { id: courseId },
-        select: { sections: true }
+        select: { sections: { select: { id: true, title: true, order: true, isCompleted: true, topics: true } } }
     });
 
     return (
         <Stack direction='row' gap={6}>
             {course.sections.map((section) => (
-                <SectionCard
-                    key={section.id}
-                    title={section.title}
-                    description={section.description}
-                    isActive
-                    linkPath={`${courseId}/sections/${section.id}`}
-                    footer={
-                        <Flex justify='space-between'>
-                            <p>5 topics</p>
-                            <p>0/5</p>
-                        </Flex>
-                    }
-                />
+                <Link key={section.id} href={`${courseId}/sections/${section.id}`}>
+                    <SectionCard
+                        title={section.title}
+                        totalTopics={section.topics.length}
+                        completedTopics={section.topics.filter((topic) => topic.isCompleted).length}
+                        isLocked={section.topics.filter((topic) => topic.isCompleted).length === 0 && section.order > 1}
+                    />
+                </Link>
             ))}
         </Stack>
     );

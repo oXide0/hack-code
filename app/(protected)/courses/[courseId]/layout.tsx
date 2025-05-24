@@ -1,6 +1,6 @@
 import { Subheader } from '@/components/layout/subheader/supheader';
 import { prisma } from '@/lib/prisma';
-import { calculateCourseCompleteness } from '@/lib/utils';
+import { calculateCompleteness } from '@/lib/utils';
 import { Box, Heading, Progress, Stack, Text } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
@@ -16,15 +16,15 @@ export default async function Layout({ params, children }: LayoutProps) {
         select: { title: true, description: true, sections: true }
     });
 
-    const { completenessPercentage, completedItems, totalItems } = calculateCourseCompleteness(course.sections);
+    const { completenessPercentage, completedItems, totalItems } = calculateCompleteness(course.sections);
 
     return (
-        <Stack gap='28px'>
+        <Stack>
             <Subheader
                 path='/courses'
                 centerItem={<Heading>{course.title}</Heading>}
-                linkLabel='Back to courses'
-                isBorder
+                backLabel='Back to courses'
+                isSeparator
                 rightItem={
                     <Box>
                         <Progress.Root size='md' w='279px' colorPalette='green' value={completenessPercentage}>

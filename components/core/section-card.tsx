@@ -1,60 +1,67 @@
-import { Badge, Box, Text } from '@chakra-ui/react';
-import Link from 'next/link';
-import { ReactNode } from 'react';
+import { Badge, Card, Flex, Text } from '@chakra-ui/react';
+import { LockKeyhole } from 'lucide-react';
 
 interface SectionCardProps {
-    readonly isActive: boolean;
     readonly title: string;
-    readonly description: string;
-    readonly footer: ReactNode;
-    readonly linkPath: string;
+    readonly isLocked: boolean;
+    readonly totalTopics: number;
+    readonly completedTopics: number;
 }
 
 export function SectionCard(props: SectionCardProps) {
     return (
-        <Link href={props.linkPath}>
-            {/* <Text
-                bgGradient='linear(to-t, #2ECC71, #0C710C)'
-                bgClip='text'
-                fontSize='2xl'
-                fontWeight='semibold'
-                textTransform='uppercase'
-                color='white'
+        <Card.Root
+            bg='gray.800'
+            borderRadius='xl'
+            minH='160px'
+            minW='270px'
+            maxW='270px'
+            position='relative'
+            borderWidth='2px'
+            px={3}
+            py={4}
+            display='flex'
+            flexDirection='column'
+            h='full'
+            borderColor={props.isLocked ? 'gray.700' : 'green.300'}
+            transition='all 0.3s ease'
+            _hover={
+                props.isLocked
+                    ? {}
+                    : {
+                          transform: 'translateY(-4px)',
+                          boxShadow: 'xl',
+                          borderColor: 'green.300',
+                          bg: 'gray.700'
+                      }
+            }
+        >
+            <Badge
+                colorPalette='green'
+                position='absolute'
+                top='-3'
+                right='4'
+                px={2}
+                py={1}
+                border='1px solid'
+                borderColor='green.300'
             >
-                {props.title}
-            </Text> */}
+                Learn next
+            </Badge>
 
-            <Box
-                bg='#232323'
-                borderRadius='2xl'
-                px={3}
-                py={4}
-                maxW='270px'
-                minW='270px'
-                h='167px'
-                display='flex'
-                flexDirection='column'
-                position='relative'
-                borderWidth='1px'
-                borderColor={props.isActive ? 'green.300' : 'gray.700'}
-                _hover={{
-                    transform: 'translateY(-2px)',
-                    boxShadow: 'lg',
-                    transition: 'all 0.2s ease'
-                }}
-            >
-                {props.isActive && (
-                    <Badge colorPalette='green' position='absolute' top='-3' right='4' px={2} py={1}>
-                        Learn next
-                    </Badge>
-                )}
+            <Flex justify='space-between' gap={4} flex='1 1 auto' pt={1}>
+                <Text fontWeight='semibold'>{props.title}</Text>
+                {props.isLocked && <LockKeyhole color='#2ECC71' />}
+            </Flex>
 
-                <Text flex='1' my={2}>
-                    {props.title}
+            <Flex justify='space-between'>
+                <Text color='gray.300'>
+                    {props.totalTopics} {props.totalTopics === 1 ? 'topic' : 'topics'}
                 </Text>
-
-                <Box mt='auto'>{props.footer}</Box>
-            </Box>
-        </Link>
+                <Text>
+                    {props.completedTopics}/{props.totalTopics} topics
+                </Text>
+            </Flex>
+        </Card.Root>
     );
 }
