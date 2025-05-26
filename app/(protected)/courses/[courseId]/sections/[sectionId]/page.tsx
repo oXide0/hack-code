@@ -159,17 +159,6 @@ function getTopicTypeBadge(type: TopicType) {
     }
 }
 
-function isTopicStarted(topic: {
-    practiceTopics: PracticeTopic[];
-    theoryTopics: TheoryTopic[];
-    validationTopics: ValidationTopic[];
-}) {
-    const practiceStarted = topic.practiceTopics.map((t) => t.isCompleted).some((started) => started);
-    const theoryStarted = topic.theoryTopics.map((t) => t.isCompleted).some((started) => started);
-    const validationStarted = topic.validationTopics.map((t) => t.isCompleted).some((started) => started);
-    return practiceStarted || theoryStarted || validationStarted;
-}
-
 function completedTopicsCount(topic: {
     type: TopicType;
     practiceTopics: PracticeTopic[];

@@ -1,5 +1,5 @@
-import { Box, Button, Container, Flex, Heading, Text } from '@chakra-ui/react';
-import { X, RefreshCcw } from 'lucide-react';
+import { Button, Container, Flex, Heading, Text } from '@chakra-ui/react';
+import { RefreshCcw, X } from 'lucide-react';
 
 export default function Page() {
     return (

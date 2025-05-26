@@ -9,7 +9,7 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-    const { stepId, topicId, courseId, sectionId } = await params;
+    const { stepId } = await params;
 
     const practice = await prisma.practiceTopic.findUniqueOrThrow({
         where: { id: stepId },
@@ -20,9 +20,9 @@ export default async function Page({ params }: PageProps) {
         }
     });
     const sortedTopics = [...practice.topic.practiceTopics].sort((a, b) => a.order - b.order);
-    const allTheories = await prisma.practiceTopic.findMany({ where: { topicId }, orderBy: { order: 'asc' } });
-    const currentIndex = allTheories.findIndex((t) => t.id === stepId);
-    const next = allTheories[currentIndex + 1];
+    // const allTheories = await prisma.practiceTopic.findMany({ where: { topicId }, orderBy: { order: 'asc' } });
+    // const currentIndex = allTheories.findIndex((t) => t.id === stepId);
+    // const next = allTheories[currentIndex + 1];
 
     return (
         <Container maxW='2xl'>

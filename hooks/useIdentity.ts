@@ -1,7 +1,6 @@
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 // const getUserById = unstable_cache(

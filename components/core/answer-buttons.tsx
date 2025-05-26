@@ -2,7 +2,6 @@
 
 import { Alert, Button, Stack } from '@chakra-ui/react';
 import { ArrowRight, SendHorizonal } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface AnswerButtonsProps {

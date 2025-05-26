@@ -7,14 +7,14 @@ export function usePythonRunner() {
     const pyodideScriptStatus = useScript(`https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/pyodide.js`);
 
     useEffect(() => {
-        // if (pyodideScriptStatus === 'ready' && !pyodide) {
-        //     (async () => {
-        //         const loadedPyodide = await globalThis.loadPyodide({
-        //             indexURL: `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`
-        //         });
-        //         setPyodide(loadedPyodide);
-        //     })();
-        // }
+        if (pyodideScriptStatus === 'ready' && !pyodide) {
+            (async () => {
+                const loadedPyodide = await globalThis.loadPyodide({
+                    indexURL: `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`
+                });
+                setPyodide(loadedPyodide);
+            })();
+        }
     }, [pyodideScriptStatus, pyodide]);
 
     return { pyodide };
