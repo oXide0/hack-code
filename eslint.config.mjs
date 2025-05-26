@@ -16,18 +16,12 @@ const eslintConfig = [
         'plugin:prettier/recommended' // Add Prettier
     ),
     {
+        plugins: ['prettier'],
         rules: {
             '@typescript-eslint/no-unused-vars': 'warn',
             '@typescript-eslint/no-explicit-any': 'warn',
-
             'react-hooks/exhaustive-deps': 'warn',
-
-            'prettier/prettier': [
-                'warn',
-                {
-                    endOfLine: 'auto'
-                }
-            ]
+            'prettier/prettier': 'warn'
         },
         settings: {
             next: {
