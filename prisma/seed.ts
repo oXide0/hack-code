@@ -63,7 +63,7 @@ async function seedUsers() {
                 create: {
                     schoolId: school.id,
                     studentId: 'S-2023-001',
-                    gradeLevel: '4'
+                    level: 1
                 }
             }
         },
@@ -90,15 +90,42 @@ export async function seedCourses() {
                         topics: {
                             create: [
                                 {
-                                    title: 'What is Python?',
+                                    title: 'What is data types?',
                                     order: 1,
                                     isCompleted: false,
                                     type: 'THEORY',
                                     theoryTopics: {
-                                        create: {
-                                            question: "Explain what Python is and what it's used for.",
-                                            codeSample: `# Example Python code\nprint("Hello, world!")`,
-                                            isCompleted: false
+                                        createMany: {
+                                            data: [
+                                                {
+                                                    order: 1,
+                                                    content:
+                                                        'In programming, each piece of data has its own unique type. This type is like a blueprint — it tells us how the data is stored in memory, what we can do with it, and how to perform those operations. Think of it as a playbook for each piece of data! As a real-world analogy, think of a dog as a type of biological species. Dogs can bark, right? That’s like an operation specific to that type.\n\nNow, in the upcoming steps, we’re going to dive into some basic data types in Python.\n\nIn programming, each piece of data has its own unique type. This type is like a blueprint — it tells us how the data is stored in memory, what we can do with it, and how to perform those operations. Think of it as a playbook for each piece of data!\nAs a real-world analogy, think of a dog as a type of biological species. Dogs can bark, right? That’s like an operation specific to that type.\n\nNow, in the upcoming steps, we’re going to dive into some basic data types in Python.',
+                                                    codeSample: `// Imports\nimport mongoose, { Schema } from 'mongoose'\n\n// Collection name\nexport const collection = 'Product'\n\n// Schema\nconst schema = new Schema({\n  name: {\n    type: String,\n    required: true\n  },\n\n  description: {\n    type: String\n  }\n}, {timestamps: true})\n\n// Model\nexport default mongoose.model(collection, schema, collection)`,
+                                                    isCompleted: false
+                                                },
+                                                {
+                                                    order: 2,
+                                                    content: `
+                                                            = Hello, AsciiDoc!
+
+This is an interactive editor.
+Use it to try https://asciidoc.org[AsciiDoc].
+
+== Section Title
+
+* A list item
+* Another list item
+
+[,ruby]
+----
+puts 'Hello, World!'
+----
+                                                        `,
+                                                    codeSample: `// Imports\nimport mongoose, { Schema } from 'mongoose'\n\n// Collection name\nexport const collection = 'Product'\n\n// Schema\nconst schema = new Schema({\n  name: {\n    type: String,\n    required: true\n  },\n\n  description: {\n    type: String\n  }\n}, {timestamps: true})\n\n// Model\nexport default mongoose.model(collection, schema, collection)`,
+                                                    isCompleted: false
+                                                }
+                                            ]
                                         }
                                     }
                                 }
@@ -116,13 +143,23 @@ export async function seedCourses() {
                                     title: 'Variables and Data Types',
                                     order: 1,
                                     isCompleted: false,
-                                    type: 'THEORY',
-                                    theoryTopics: {
+                                    type: 'VALIDATION',
+                                    validationTopics: {
                                         create: {
-                                            question:
-                                                'What are variables in Python? Provide examples of different data types.',
-                                            codeSample: `x = 5  # integer\ny = "hello"  # string\nz = 3.14  # float`,
-                                            isCompleted: false
+                                            order: 1,
+                                            question: 'What was written in this code? ',
+                                            codeSample: `// Imports\n import mongoose, { Schema } from 'mongoose'\n\n// Collection name export const collection = 'Product'`,
+                                            isCompleted: false,
+                                            validationAnswers: {
+                                                create: [
+                                                    { value: 'How the data is stored', isCorrect: true },
+                                                    { value: 'The color of the data', isCorrect: false },
+                                                    {
+                                                        value: 'The operations that can be performed on it',
+                                                        isCorrect: false
+                                                    }
+                                                ]
+                                            }
                                         }
                                     }
                                 },
@@ -133,6 +170,7 @@ export async function seedCourses() {
                                     type: 'PRACTICE',
                                     practiceTopics: {
                                         create: {
+                                            order: 1,
                                             task: 'Declare a variable called `name` and assign your name to it. Then print it.',
                                             starterCode: `# Your code here\n`,
                                             isCompleted: false

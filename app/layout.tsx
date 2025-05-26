@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { readonly children: ReactNode }) {
     return (
-        <html lang='en' suppressHydrationWarning>
+        <html lang='en' suppressHydrationWarning style={{ background: '#1C1C1C' }}>
             <body className={`${poppins.variable} font-sans antialiased`}>
                 <Provider>{children}</Provider>
             </body>

@@ -2,7 +2,7 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 interface TopicCardProps {
-    readonly isActive?: boolean;
+    readonly isLocked?: boolean;
     readonly isCompleted?: boolean;
     readonly label: string;
     readonly title: string;
@@ -20,8 +20,7 @@ export function TopicCard(props: TopicCardProps) {
             borderRadius='full'
             px={6}
             py={5}
-            cursor='pointer'
-            borderColor={props.isActive ? 'green.300' : 'gray.700'}
+            borderColor={props.isLocked ? 'gray.700' : 'green.300'}
             bgColor={props.isCompleted ? 'green.700' : '#232323'}
         >
             <Flex alignItems='center' justify='space-between'>

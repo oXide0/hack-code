@@ -23,7 +23,7 @@ export function Sidebar({ items }: SidebarProps) {
             position='fixed'
             zIndex='sticky'
         >
-            <Link href='/'>
+            <Link href='/courses'>
                 <Center>
                     <Image src='/logo.svg' height={30} width={184} alt='logo' priority />
                 </Center>

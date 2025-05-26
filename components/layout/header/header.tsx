@@ -2,7 +2,12 @@ import { Flex, Text } from '@chakra-ui/react';
 import { HeaderDropdown } from './header-dropdown';
 import { HeaderHeading } from './header-heading';
 
-export async function Header({ username }: { username: string }) {
+interface HeaderProps {
+    readonly username: string;
+    readonly level: number | undefined;
+}
+
+export async function Header(props: HeaderProps) {
     return (
         <Flex
             justify='space-between'
@@ -20,23 +25,25 @@ export async function Header({ username }: { username: string }) {
             <HeaderHeading />
 
             <Flex gap={4} align='center'>
-                <Flex
-                    px={2}
-                    py={3}
-                    bg='gray.700'
-                    borderRadius='lg'
-                    border='1px solid gray'
-                    justify='center'
-                    align='center'
-                    gap={2}
-                    fontSize='xl'
-                    fontWeight='medium'
-                >
-                    <Text>💠</Text>
-                    <Text>LVL - 1</Text>
-                </Flex>
+                {props.level != null && (
+                    <Flex
+                        px={2}
+                        py={3}
+                        bg='gray.700'
+                        borderRadius='lg'
+                        border='1px solid gray'
+                        justify='center'
+                        align='center'
+                        gap={2}
+                        fontSize='xl'
+                        fontWeight='medium'
+                    >
+                        <Text>💠</Text>
+                        <Text>LVL - {props.level}</Text>
+                    </Flex>
+                )}
 
-                <HeaderDropdown username={username} />
+                <HeaderDropdown username={props.username} />
             </Flex>
         </Flex>
     );

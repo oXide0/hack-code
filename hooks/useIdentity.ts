@@ -38,7 +38,12 @@ export async function useIdentity() {
             lastName: true,
             email: true,
             school: true,
-            createdAt: true
+            createdAt: true,
+            studentProfile: {
+                select: {
+                    level: true
+                }
+            }
         }
     });
 }

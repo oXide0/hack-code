@@ -22,7 +22,10 @@ export default async function Layout({ children }: { readonly children: ReactNod
             />
 
             <Flex h='full' w='full' direction='column' pl='275px'>
-                <Header username={`${identity.firstName} ${identity.lastName}`} />
+                <Header
+                    level={identity.studentProfile?.level}
+                    username={`${identity.firstName} ${identity.lastName}`}
+                />
                 <Box pt='80px'>{children}</Box>
             </Flex>
         </Box>

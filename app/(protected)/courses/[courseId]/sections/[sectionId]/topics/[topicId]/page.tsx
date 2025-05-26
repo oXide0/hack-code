@@ -1,103 +1,51 @@
-import { TempButton } from '@/components/core/temp-button';
 import { prisma } from '@/lib/prisma';
-import { call } from '@/lib/utils';
 import { Heading } from '@chakra-ui/react';
+import { notFound, redirect } from 'next/navigation';
 
 export default async function Page({ params }: { params: Promise<{ topicId: string }> }) {
     const { topicId } = await params;
-    const topic = await prisma.topic.findUniqueOrThrow({
+
+    const topic = await prisma.topic.findUnique({
         where: { id: topicId },
-        select: { title: true, type: true, practiceTopics: true, theoryTopics: true, validationTopics: true }
-    });
-
-    return (
-        <div>
-            <Heading>{topic.title}</Heading>
-            <Heading>{topic.type}</Heading>
-            {call(() => {
-                if (topic.type === 'THEORY') {
-                    return topic.theoryTopics.map((item) => (
-                        <TempButton
-                            callback={async () => {
-                                'use server';
-                                await prisma.theoryTopic.update({
-                                    where: { id: item.id },
-                                    data: { isCompleted: true }
-                                });
-                                await updateTopicCompleteness(topicId);
-                            }}
-                            label={item.question}
-                        />
-                    ));
-                }
-                if (topic.type === 'VALIDATION') {
-                    return topic.validationTopics.map((item) => (
-                        <TempButton
-                            callback={async () => {
-                                'use server';
-                                await prisma.theoryTopic.update({
-                                    where: { id: item.id },
-                                    data: { isCompleted: true }
-                                });
-                                await updateTopicCompleteness(topicId);
-                            }}
-                            label={item.task}
-                        />
-                    ));
-                }
-                if (topic.type === 'PRACTICE') {
-                    return topic.practiceTopics.map((item) => (
-                        <TempButton
-                            callback={async () => {
-                                'use server';
-                                await prisma.theoryTopic.update({
-                                    where: { id: item.id },
-                                    data: { isCompleted: true }
-                                });
-                                await updateTopicCompleteness(topicId);
-                            }}
-                            label={item.task}
-                        />
-                    ));
-                }
-            })}
-        </div>
-    );
-}
-
-export async function updateTopicCompleteness(id: string) {
-    const topic = await prisma.topic.findUniqueOrThrow({
-        where: { id },
-        select: {
-            type: true,
-            practiceTopics: true,
-            theoryTopics: true,
-            validationTopics: true
+        include: {
+            theoryTopics: { select: { id: true, isCompleted: true }, orderBy: { order: 'asc' } },
+            validationTopics: { select: { id: true, isCompleted: true }, orderBy: { order: 'asc' } },
+            practiceTopics: { select: { id: true, isCompleted: true }, orderBy: { order: 'asc' } }
         }
     });
 
-    if (topic.type === 'THEORY') {
-        if (topic.theoryTopics.every((item) => item.isCompleted)) {
-            await prisma.topic.update({
-                where: { id },
-                data: { isCompleted: true }
-            });
-        }
+    if (topic == null) return notFound();
+
+    const getFirstIncompleteSubtopic = (subtopics: { id: string; isCompleted: boolean }[]) => {
+        return subtopics.find((subtopic) => !subtopic.isCompleted) || subtopics[0];
+    };
+
+    let redirectPath: string | null = null;
+
+    switch (topic.type) {
+        case 'THEORY':
+            if (topic.theoryTopics.length > 0) {
+                const firstIncomplete = getFirstIncompleteSubtopic(topic.theoryTopics);
+                redirectPath = `${topic.id}/theory/${firstIncomplete.id}`;
+            }
+            break;
+        case 'VALIDATION':
+            if (topic.validationTopics.length > 0) {
+                const firstIncomplete = getFirstIncompleteSubtopic(topic.validationTopics);
+                redirectPath = `${topic.id}/validation/${firstIncomplete.id}`;
+            }
+            break;
+        case 'PRACTICE':
+            if (topic.practiceTopics.length > 0) {
+                const firstIncomplete = getFirstIncompleteSubtopic(topic.practiceTopics);
+                redirectPath = `${topic.id}/practice/${firstIncomplete.id}`;
+            }
+            break;
     }
-    if (topic.type === 'VALIDATION') {
-        if (topic.validationTopics.every((item) => item.isCompleted)) {
-            await prisma.topic.update({
-                where: { id },
-                data: { isCompleted: true }
-            });
-        }
+
+    if (redirectPath) {
+        redirect(redirectPath);
     }
-    if (topic.type === 'PRACTICE') {
-        if (topic.practiceTopics.every((item) => item.isCompleted)) {
-            await prisma.topic.update({
-                where: { id },
-                data: { isCompleted: true }
-            });
-        }
-    }
+
+    return <Heading>No subtopics found</Heading>;
 }

@@ -1,9 +1,21 @@
+import { ConditionalLink } from '@/components/core/conditional-link';
 import { TopicCard } from '@/components/core/topic-card';
+import { Subheader } from '@/components/layout/subheader/supheader';
 import { PracticeTopic, prisma, TheoryTopic, TopicType, ValidationTopic } from '@/lib/prisma';
 import { calculateCompleteness, call } from '@/lib/utils';
-import { AbsoluteCenter, Badge, Box, Container, Flex, Heading, ProgressCircle, Stack, Text } from '@chakra-ui/react';
+import {
+    AbsoluteCenter,
+    Badge,
+    Box,
+    Container,
+    Flex,
+    Heading,
+    Progress,
+    ProgressCircle,
+    Stack,
+    Text
+} from '@chakra-ui/react';
 import { LockKeyhole } from 'lucide-react';
-import Link from 'next/link';
 
 export default async function Page({ params }: { params: Promise<{ sectionId: string }> }) {
     const { sectionId } = await params;
@@ -12,7 +24,9 @@ export default async function Page({ params }: { params: Promise<{ sectionId: st
         select: {
             title: true,
             description: true,
+            course: { select: { title: true, sections: { select: { isCompleted: true, order: true } } } },
             topics: {
+                orderBy: { order: 'asc' },
                 select: {
                     id: true,
                     title: true,
@@ -26,59 +40,98 @@ export default async function Page({ params }: { params: Promise<{ sectionId: st
             }
         }
     });
-    const completeness = calculateCompleteness(section.topics);
+    const sectionCompleteness = calculateCompleteness(section.topics);
+    const courseCompleteness = calculateCompleteness(section.course.sections);
 
     return (
-        <Container maxW='2xl'>
-            <Flex justify='space-between'>
-                <Box>
-                    <Heading size='2xl'>{section.title}.</Heading>
-                    <Text color='gray.300' fontSize='sm'>
-                        {section.description}
-                    </Text>
-                </Box>
-                <ProgressCircle.Root
-                    size='xl'
-                    value={completeness.completenessPercentage}
-                    color='green.500'
-                    colorPalette='green'
-                >
-                    <ProgressCircle.Circle>
-                        <ProgressCircle.Track />
-                        <ProgressCircle.Range />
-                    </ProgressCircle.Circle>
-                    <AbsoluteCenter>
-                        <ProgressCircle.ValueText />
-                    </AbsoluteCenter>
-                </ProgressCircle.Root>
-            </Flex>
+        <Stack>
+            <Subheader
+                path='/courses'
+                centerItem={<Heading>{section.course.title}</Heading>}
+                backLabel='Back to courses'
+                isSeparator
+                rightItem={
+                    <Box>
+                        <Progress.Root
+                            size='md'
+                            w='279px'
+                            colorPalette='green'
+                            value={courseCompleteness.completenessPercentage}
+                        >
+                            <Progress.Track bg='#3A3A3A' borderRadius='full'>
+                                <Progress.Range />
+                            </Progress.Track>
+                        </Progress.Root>
+                        <Stack direction='row' justify='space-between' pt={1}>
+                            <Text fontSize='sm' color='#7A7A7A'>
+                                {courseCompleteness.completenessPercentage}% complete
+                            </Text>
+                            <Text fontSize='sm' color='#7A7A7A'>
+                                {courseCompleteness.completedItems}/{courseCompleteness.totalItems}
+                            </Text>
+                        </Stack>
+                    </Box>
+                }
+            />
+            <Container maxW='2xl'>
+                <Flex justify='space-between'>
+                    <Box>
+                        <Heading size='2xl'>{section.title}.</Heading>
+                        <Text color='gray.300' fontSize='sm'>
+                            {section.description}
+                        </Text>
+                    </Box>
+                    <ProgressCircle.Root
+                        size='xl'
+                        value={sectionCompleteness.completenessPercentage}
+                        color='green.500'
+                        colorPalette='green'
+                    >
+                        <ProgressCircle.Circle>
+                            <ProgressCircle.Track />
+                            <ProgressCircle.Range />
+                        </ProgressCircle.Circle>
+                        <AbsoluteCenter>
+                            <ProgressCircle.ValueText />
+                        </AbsoluteCenter>
+                    </ProgressCircle.Root>
+                </Flex>
 
-            <Stack pt={6}>
-                {section.topics.map((topic, index) => (
-                    <Link key={topic.id} href={`${sectionId}/topics/${topic.id}`}>
-                        <TopicCard
-                            label={index + 1 < 10 ? `0${index + 1}` : `${index + 1}`}
-                            title={topic.title}
-                            isActive={isTopicStarted(topic) || topic.order === 1}
-                            isCompleted={topic.isCompleted}
-                            rightElement={
-                                isTopicStarted(topic) || topic.order === 1 ? (
-                                    <Text>
-                                        {call(() => {
-                                            const { total, completed } = completedTopicsCount(topic);
-                                            return `${completed} / ${total}`;
-                                        })}
-                                    </Text>
-                                ) : (
-                                    <LockKeyhole />
-                                )
-                            }
-                            badge={getTopicTypeBadge(topic.type)}
-                        />
-                    </Link>
-                ))}
-            </Stack>
-        </Container>
+                <Stack pt={6}>
+                    {section.topics.map((topic, index) => {
+                        const isLocked = section.topics.find((t) => t.order === topic.order - 1)?.isCompleted === false;
+
+                        return (
+                            <ConditionalLink
+                                key={topic.id}
+                                href={`${sectionId}/topics/${topic.id}`}
+                                disabled={isLocked}
+                            >
+                                <TopicCard
+                                    label={index + 1 < 10 ? `0${index + 1}` : `${index + 1}`}
+                                    title={topic.title}
+                                    isLocked={isLocked}
+                                    isCompleted={topic.isCompleted}
+                                    rightElement={
+                                        isLocked ? (
+                                            <LockKeyhole />
+                                        ) : (
+                                            <Text>
+                                                {call(() => {
+                                                    const { total, completed } = completedTopicsCount(topic);
+                                                    return `${completed} / ${total}`;
+                                                })}
+                                            </Text>
+                                        )
+                                    }
+                                    badge={getTopicTypeBadge(topic.type)}
+                                />
+                            </ConditionalLink>
+                        );
+                    })}
+                </Stack>
+            </Container>
+        </Stack>
     );
 }
 
@@ -92,8 +145,8 @@ function getTopicTypeBadge(type: TopicType) {
     }
     if (type === 'VALIDATION') {
         return (
-            <Badge colorPalette='orange' px={2} py={1} border='1px solid' borderColor='blue.300'>
-                Validate
+            <Badge colorPalette='orange' px={2} py={1} border='1px solid' borderColor='orange.300'>
+                Validation test
             </Badge>
         );
     }
