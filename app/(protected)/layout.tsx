@@ -12,7 +12,7 @@ export default async function Layout({ children }: { readonly children: ReactNod
         <Box w='full' h='100vh' p={3}>
             <Sidebar
                 items={[
-                    { value: '/learn', label: 'learn', icon: <LayoutPanelLeft size={20} /> },
+                    { value: '/courses', label: 'learn', icon: <LayoutPanelLeft size={20} /> },
                     { value: '/practice', label: 'practice', icon: <Dumbbell size={20} /> },
                     { value: '/leaderboards', label: 'leaderboards', icon: <UsersRound size={20} /> },
                     { value: '/quests', label: 'quests', icon: <MapPin size={20} /> },

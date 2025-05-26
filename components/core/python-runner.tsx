@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePythonRunner } from '@/lib/usePyodide';
+import { usePythonRunner } from '@/hooks/usePyodide';
 
 export function PythonRunner() {
     const { pyodide } = usePythonRunner();
