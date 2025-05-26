@@ -39,6 +39,7 @@ export function LoginForm() {
                 });
             }
         } catch (error) {
+            console.error('Login error:', error);
             toaster.create({
                 title: 'Error',
                 description: 'An unexpected error occurred',

@@ -14,6 +14,7 @@ export function calculateCompleteness(items: Array<{ isCompleted: boolean }>): {
     };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function call(fn: (...args: any[]) => any, ...args: Parameters<typeof fn>): ReturnType<typeof fn> {
     return fn(...args);
 }

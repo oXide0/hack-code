@@ -1,12 +1,12 @@
 import { Header } from '@/components/layout/header/header';
 import { Sidebar } from '@/components/layout/sidebar/sidebar';
-import { useIdentity } from '@/hooks/useIdentity';
+import { getIdentity } from '@/hooks/useIdentity';
 import { Box, Flex } from '@chakra-ui/react';
 import { Dumbbell, LayoutPanelLeft, MapPin, ShoppingBag, User, UsersRound } from 'lucide-react';
 import { ReactNode } from 'react';
 
 export default async function Layout({ children }: { readonly children: ReactNode }) {
-    const identity = await useIdentity();
+    const identity = await getIdentity();
 
     return (
         <Box w='full' h='100vh' p={3}>

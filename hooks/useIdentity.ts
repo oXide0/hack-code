@@ -22,7 +22,7 @@ import { redirect } from 'next/navigation';
 //     { revalidate: 3600, tags: ['identity'] }
 // );
 
-export async function useIdentity() {
+export async function getIdentity() {
     const session = await getServerSession(authOptions);
     if (session == null || session.user == null) {
         return redirect('/login');

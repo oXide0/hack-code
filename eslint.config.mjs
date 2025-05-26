@@ -17,10 +17,9 @@ const eslintConfig = [
             prettier: prettierPlugin
         },
         rules: {
-            '@typescript-eslint/no-unused-vars': 'warn',
-            '@typescript-eslint/no-explicit-any': 'warn',
             'react-hooks/exhaustive-deps': 'warn',
-            'prettier/prettier': 'warn'
+            'prettier/prettier': 'warn',
+            'react/no-unescaped-entities': 'off'
         },
         settings: {
             next: {
