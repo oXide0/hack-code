@@ -3,7 +3,7 @@ import { SectionCard } from '@/components/core/section-card';
 import { Subheader } from '@/components/layout/subheader/supheader';
 import { prisma } from '@/lib/prisma';
 import { calculateCompleteness, chunkArray } from '@/lib/utils';
-import { Box, Flex, Heading, Progress, Stack, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Progress, Stack, Text, Highlight } from '@chakra-ui/react';
 import Image from 'next/image';
 
 export default async function Page({ params }: { params: Promise<{ courseId: string }> }) {
@@ -51,7 +51,12 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
                     </Box>
                 }
             />
-            <Stack maxW='985px' m='0 auto'>
+            <Heading pt={10} fontSize='100px' fontWeight={600} textAlign='center'>
+                <Highlight styles={{ px: '0.5', bg: 'green.subtle', color: 'green.300' }} query='Knowledge'>
+                    Knowledge map
+                </Highlight>
+            </Heading>
+            <Stack maxW='985px' m='0 auto' pt={24}>
                 {rows.map((rowSections, rowIndex) => {
                     const displaySections = rowIndex % 2 === 0 ? rowSections : [...rowSections].reverse();
 
