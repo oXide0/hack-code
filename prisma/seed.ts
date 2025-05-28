@@ -79,54 +79,34 @@ export async function seedCourses() {
     await prisma.course.create({
         data: {
             title: 'Python for Beginners',
-            description: 'An introductory course to Python programming.',
+            description: 'A comprehensive introduction to Python programming from basics to intermediate concepts.',
             sections: {
                 create: [
                     {
                         title: 'Introduction to Python',
                         description: 'Overview of Python and its uses.',
                         order: 1,
-                        isCompleted: false,
                         topics: {
                             create: [
                                 {
-                                    title: 'What is data types?',
+                                    title: 'Basic Concepts',
                                     order: 1,
-                                    isCompleted: false,
-                                    type: 'THEORY',
-                                    theoryTopics: {
-                                        createMany: {
-                                            data: [
-                                                {
-                                                    order: 1,
-                                                    content:
-                                                        'In programming, each piece of data has its own unique type. This type is like a blueprint — it tells us how the data is stored in memory, what we can do with it, and how to perform those operations. Think of it as a playbook for each piece of data! As a real-world analogy, think of a dog as a type of biological species. Dogs can bark, right? That’s like an operation specific to that type.\n\nNow, in the upcoming steps, we’re going to dive into some basic data types in Python.\n\nIn programming, each piece of data has its own unique type. This type is like a blueprint — it tells us how the data is stored in memory, what we can do with it, and how to perform those operations. Think of it as a playbook for each piece of data!\nAs a real-world analogy, think of a dog as a type of biological species. Dogs can bark, right? That’s like an operation specific to that type.\n\nNow, in the upcoming steps, we’re going to dive into some basic data types in Python.',
-                                                    codeSample: `// Imports\nimport mongoose, { Schema } from 'mongoose'\n\n// Collection name\nexport const collection = 'Product'\n\n// Schema\nconst schema = new Schema({\n  name: {\n    type: String,\n    required: true\n  },\n\n  description: {\n    type: String\n  }\n}, {timestamps: true})\n\n// Model\nexport default mongoose.model(collection, schema, collection)`,
-                                                    isCompleted: false
-                                                },
-                                                {
-                                                    order: 2,
-                                                    content: `
-                                                            = Hello, AsciiDoc!
-
-This is an interactive editor.
-Use it to try https://asciidoc.org[AsciiDoc].
-
-== Section Title
-
-* A list item
-* Another list item
-
-[,ruby]
-----
-puts 'Hello, World!'
-----
-                                                        `,
-                                                    codeSample: `// Imports\nimport mongoose, { Schema } from 'mongoose'\n\n// Collection name\nexport const collection = 'Product'\n\n// Schema\nconst schema = new Schema({\n  name: {\n    type: String,\n    required: true\n  },\n\n  description: {\n    type: String\n  }\n}, {timestamps: true})\n\n// Model\nexport default mongoose.model(collection, schema, collection)`,
-                                                    isCompleted: false
-                                                }
-                                            ]
-                                        }
+                                    exercises: {
+                                        create: [
+                                            {
+                                                type: 'THEORY',
+                                                order: 1,
+                                                content:
+                                                    'In programming, each piece of data has its own unique type...',
+                                                codeSample: `// Imports\nimport mongoose, { Schema } from 'mongoose'`
+                                            },
+                                            {
+                                                type: 'THEORY',
+                                                order: 2,
+                                                content: '= Hello, AsciiDoc!\n\nThis is an interactive editor...',
+                                                codeSample: `// Imports\nimport mongoose, { Schema } from 'mongoose'`
+                                            }
+                                        ]
                                     }
                                 }
                             ]
@@ -136,45 +116,231 @@ puts 'Hello, World!'
                         title: 'Variables and Data Types',
                         description: 'Learn how to use variables and data types in Python.',
                         order: 2,
-                        isCompleted: false,
                         topics: {
                             create: [
                                 {
-                                    title: 'Variables and Data Types',
+                                    title: 'Working with Variables',
                                     order: 1,
-                                    isCompleted: false,
-                                    type: 'VALIDATION',
-                                    validationTopics: {
-                                        create: {
-                                            order: 1,
-                                            question: 'What was written in this code? ',
-                                            codeSample: `// Imports\n import mongoose, { Schema } from 'mongoose'\n\n// Collection name export const collection = 'Product'`,
-                                            isCompleted: false,
-                                            validationAnswers: {
-                                                create: [
-                                                    { value: 'How the data is stored', isCorrect: true },
-                                                    { value: 'The color of the data', isCorrect: false },
-                                                    {
-                                                        value: 'The operations that can be performed on it',
-                                                        isCorrect: false
-                                                    }
-                                                ]
+                                    exercises: {
+                                        create: [
+                                            {
+                                                type: 'VALIDATION',
+                                                order: 1,
+                                                content: 'What was written in this code?',
+                                                codeSample: `// Imports\nimport mongoose, { Schema } from 'mongoose'`,
+                                                options: {
+                                                    choices: [
+                                                        'How the data is stored',
+                                                        'The color of the data',
+                                                        'The operations that can be performed on it'
+                                                    ],
+                                                    correctIndex: 0
+                                                }
+                                            },
+                                            {
+                                                type: 'PRACTICE',
+                                                order: 2,
+                                                content:
+                                                    'Declare a variable called `name` and assign your name to it. Then print it.',
+                                                starterCode: `# Your code here\n`,
+                                                solution: `name = "Your Name"\nprint(name)`,
+                                                testCases: {
+                                                    inputs: [],
+                                                    expectedOutputs: ['Your Name']
+                                                }
                                             }
-                                        }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        title: 'Control Flow',
+                        description: 'Learn about conditionals and loops in Python.',
+                        order: 3,
+                        topics: {
+                            create: [
+                                {
+                                    title: 'If Statements',
+                                    order: 1,
+                                    exercises: {
+                                        create: [
+                                            {
+                                                type: 'THEORY',
+                                                order: 1,
+                                                content: 'If statements allow your program to make decisions...',
+                                                codeSample: `age = 18\nif age >= 18:\n    print("You're an adult")`
+                                            },
+                                            {
+                                                type: 'PRACTICE',
+                                                order: 2,
+                                                content:
+                                                    'Write a program that checks if a number is positive, negative, or zero.',
+                                                starterCode: `number = 10  # Try changing this value\n# Your code here`,
+                                                solution: `number = 10\nif number > 0:\n    print("Positive")\nelif number < 0:\n    print("Negative")\nelse:\n    print("Zero")`,
+                                                testCases: {
+                                                    inputs: [5, -3, 0],
+                                                    expectedOutputs: ['Positive', 'Negative', 'Zero']
+                                                }
+                                            }
+                                        ]
                                     }
                                 },
                                 {
-                                    title: 'Practice: Variables',
+                                    title: 'Loops',
                                     order: 2,
-                                    isCompleted: false,
-                                    type: 'PRACTICE',
-                                    practiceTopics: {
-                                        create: {
-                                            order: 1,
-                                            task: 'Declare a variable called `name` and assign your name to it. Then print it.',
-                                            starterCode: `# Your code here\n`,
-                                            isCompleted: false
-                                        }
+                                    exercises: {
+                                        create: [
+                                            {
+                                                type: 'THEORY',
+                                                order: 1,
+                                                content: 'Loops allow you to repeat actions in your code...',
+                                                codeSample: `# For loop example\nfor i in range(5):\n    print(i)`
+                                            },
+                                            {
+                                                type: 'PRACTICE',
+                                                order: 2,
+                                                content: 'Write a program that prints the first 10 even numbers.',
+                                                starterCode: `# Your code here`,
+                                                solution: `for i in range(2, 21, 2):\n    print(i)`,
+                                                testCases: {
+                                                    inputs: [],
+                                                    expectedOutputs: ['2\n4\n6\n8\n10\n12\n14\n16\n18\n20']
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        title: 'Functions',
+                        description: 'Learn to create and use functions in Python.',
+                        order: 4,
+                        topics: {
+                            create: [
+                                {
+                                    title: 'Function Basics',
+                                    order: 1,
+                                    exercises: {
+                                        create: [
+                                            {
+                                                type: 'THEORY',
+                                                order: 1,
+                                                content:
+                                                    'Functions are reusable blocks of code that perform specific tasks...',
+                                                codeSample: `def greet(name):\n    return f"Hello, {name}!"`
+                                            },
+                                            {
+                                                type: 'PRACTICE',
+                                                order: 2,
+                                                content: 'Create a function that calculates the area of a rectangle.',
+                                                starterCode: `# Your code here`,
+                                                solution: `def rectangle_area(length, width):\n    return length * width`,
+                                                testCases: {
+                                                    inputs: [
+                                                        [4, 5],
+                                                        [3, 7]
+                                                    ],
+                                                    expectedOutputs: ['20', '21']
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    title: 'Return Values',
+                                    order: 2,
+                                    exercises: {
+                                        create: [
+                                            {
+                                                type: 'VALIDATION',
+                                                order: 1,
+                                                content: 'What does this function return when called with 5?',
+                                                codeSample: `def square(x):\n    return x * x`,
+                                                options: {
+                                                    choices: ['10', '25', '5', 'None'],
+                                                    correctIndex: 1
+                                                }
+                                            },
+                                            {
+                                                type: 'PRACTICE',
+                                                order: 2,
+                                                content: 'Write a function that checks if a number is prime.',
+                                                starterCode: `def is_prime(n):\n    # Your code here`,
+                                                solution: `def is_prime(n):\n    if n <= 1:\n        return False\n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:\n            return False\n    return True`,
+                                                testCases: {
+                                                    inputs: [2, 7, 10, 1],
+                                                    expectedOutputs: ['True', 'True', 'False', 'False']
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        title: 'Data Structures',
+                        description: 'Learn about lists, dictionaries, and other data structures.',
+                        order: 5,
+                        topics: {
+                            create: [
+                                {
+                                    title: 'Lists',
+                                    order: 1,
+                                    exercises: {
+                                        create: [
+                                            {
+                                                type: 'THEORY',
+                                                order: 1,
+                                                content: 'Lists are ordered collections of items...',
+                                                codeSample: `fruits = ['apple', 'banana', 'cherry']\nprint(fruits[1])  # Outputs 'banana'`
+                                            },
+                                            {
+                                                type: 'PRACTICE',
+                                                order: 2,
+                                                content:
+                                                    'Write a function that returns the sum of all numbers in a list.',
+                                                starterCode: `def sum_list(numbers):\n    # Your code here`,
+                                                solution: `def sum_list(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n    return total`,
+                                                testCases: {
+                                                    inputs: [
+                                                        [1, 2, 3],
+                                                        [10, 20, 30]
+                                                    ],
+                                                    expectedOutputs: ['6', '60']
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    title: 'Dictionaries',
+                                    order: 2,
+                                    exercises: {
+                                        create: [
+                                            {
+                                                type: 'THEORY',
+                                                order: 1,
+                                                content: 'Dictionaries store key-value pairs...',
+                                                codeSample: `person = {\n    "name": "Alice",\n    "age": 25\n}`
+                                            },
+                                            {
+                                                type: 'PRACTICE',
+                                                order: 2,
+                                                content:
+                                                    'Create a function that counts how many times each word appears in a string.',
+                                                starterCode: `def word_count(text):\n    # Your code here`,
+                                                solution: `def word_count(text):\n    words = text.split()\n    counts = {}\n    for word in words:\n        counts[word] = counts.get(word, 0) + 1\n    return counts`,
+                                                testCases: {
+                                                    inputs: ['hello world hello'],
+                                                    expectedOutputs: [{ hello: 2, world: 1 }]
+                                                }
+                                            }
+                                        ]
                                     }
                                 }
                             ]
@@ -185,7 +351,7 @@ puts 'Hello, World!'
         }
     });
 
-    console.log('Course seed data created successfully');
+    console.log('Python course with 5 sections created successfully');
 }
 
 async function main() {

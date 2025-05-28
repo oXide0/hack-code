@@ -4,8 +4,10 @@ import { Alert, Button, Stack } from '@chakra-ui/react';
 import { ArrowRight, SendHorizonal } from 'lucide-react';
 import { useState } from 'react';
 
+export type Answers = { choices: string[]; correctIndex: number };
+
 interface AnswerButtonsProps {
-    readonly answers: Array<{ value: string; isCorrect: boolean }>;
+    readonly answers: Answers;
     readonly isLastStep: boolean;
     readonly onSubmit: () => Promise<void>;
 }
@@ -24,9 +26,15 @@ export function AnswerButtons(props: AnswerButtonsProps) {
     return (
         <>
             <Stack direction='column'>
-                {props.answers.map((answer, index) => (
-                    <Button key={index} variant='surface' onClick={() => handleAnswer(answer.isCorrect)}>
-                        {answer.value}
+                {props.answers.choices.map((choice, index) => (
+                    <Button
+                        key={index}
+                        variant='surface'
+                        onClick={() => {
+                            handleAnswer(index === props.answers.correctIndex);
+                        }}
+                    >
+                        {choice}
                     </Button>
                 ))}
             </Stack>

@@ -3,16 +3,16 @@ import { Stack } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 interface LayoutProps {
-    readonly params: Promise<{ courseId: string; sectionId: string }>;
+    readonly params: Promise<{ courseId: string }>;
     readonly children: ReactNode;
 }
 
 export default async function Layout({ params, children }: LayoutProps) {
-    const { courseId, sectionId } = await params;
+    const { courseId } = await params;
 
     return (
         <Stack>
-            <Subheader path={`/courses/${courseId}/sections/${sectionId}`} backLabel='Back' />
+            <Subheader path={`/courses/${courseId}`} backLabel='Back' />
             {children}
         </Stack>
     );

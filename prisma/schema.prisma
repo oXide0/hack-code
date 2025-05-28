@@ -82,13 +82,16 @@ model Student {
 }
 
 model Course {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   title       String
   description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   sections Section[]
+
+  @@index([createdAt])
 }
 
 model Section {
@@ -96,77 +99,58 @@ model Section {
   title       String
   description String
   order       Int
-  isCompleted Boolean
+  isCompleted Boolean @default(false)
 
   courseId String
-  course   Course @relation(fields: [courseId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   topics Topic[]
-}
 
-enum TopicType {
-  THEORY
-  VALIDATION
-  PRACTICE
+  @@index([courseId, order])
 }
 
 model Topic {
-  id          String    @id @default(uuid())
+  id          String  @id @default(uuid())
   title       String
   order       Int
-  isCompleted Boolean
-  type        TopicType
+  isCompleted Boolean @default(false)
+
+  updatedAt DateTime @updatedAt
 
   sectionId String
-  section   Section @relation(fields: [sectionId], references: [id])
+  section   Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 
-  theoryTopics     TheoryTopic[]
-  validationTopics ValidationTopic[]
-  practiceTopics   PracticeTopic[]
+  exercises Exercise[]
+
+  @@unique([sectionId, order])
+  @@index([sectionId])
 }
 
-model TheoryTopic {
-  id          String  @id @default(uuid())
-  content     String
-  codeSample  String?
-  isCompleted Boolean
+model Exercise {
+  id          String       @id @default(uuid())
+  type        ExerciseType
+  content     String // Question/text/content
+  explanation String? // Explanation after answering
+  codeSample  String? // For coding exercises
   order       Int
+  isCompleted Boolean      @default(false)
+
+  // For multiple choice questions
+  options Json? // { choices: string[], correctIndex: number }
+
+  // For coding exercises
+  starterCode String?
+  solution    String?
+  testCases   Json? // { inputs: any[], expectedOutputs: any[] }
 
   topicId String
-  topic   Topic  @relation(fields: [topicId], references: [id])
+  topic   Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@index([topicId, order])
 }
 
-model ValidationTopic {
-  id          String  @id @default(uuid())
-  question    String
-  codeSample  String?
-  isCompleted Boolean
-  order       Int
-
-  topicId String
-  topic   Topic  @relation(fields: [topicId], references: [id])
-
-  validationAnswers ValidationAnswer[]
-}
-
-model ValidationAnswer {
-  id        String  @id @default(uuid())
-  value     String
-  isCorrect Boolean
-
-  validationTopicId String
-  validationTopic   ValidationTopic @relation(fields: [validationTopicId], references: [id])
-
-  @@index([validationTopicId])
-}
-
-model PracticeTopic {
-  id          String  @id @default(uuid())
-  task        String
-  starterCode String
-  isCompleted Boolean
-  order       Int
-
-  topicId String
-  topic   Topic  @relation(fields: [topicId], references: [id])
+enum ExerciseType {
+  THEORY
+  VALIDATION
+  PRACTICE
 }

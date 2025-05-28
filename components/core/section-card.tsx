@@ -1,9 +1,11 @@
 import { Badge, Card, Flex, Text } from '@chakra-ui/react';
-import { LockKeyhole } from 'lucide-react';
+import { CheckCircle, LockKeyhole } from 'lucide-react';
 
 interface SectionCardProps {
     readonly title: string;
     readonly isLocked: boolean;
+    readonly isCompleted: boolean;
+    readonly isNext: boolean;
     readonly totalTopics: number;
     readonly completedTopics: number;
 }
@@ -26,7 +28,7 @@ export function SectionCard(props: SectionCardProps) {
             borderColor={props.isLocked ? 'gray.700' : 'green.300'}
             transition='all 0.3s ease'
             _hover={
-                props.isLocked
+                props.isLocked || props.isCompleted
                     ? {}
                     : {
                           transform: 'translateY(-4px)',
@@ -36,22 +38,25 @@ export function SectionCard(props: SectionCardProps) {
                       }
             }
         >
-            <Badge
-                colorPalette='green'
-                position='absolute'
-                top='-3'
-                right='4'
-                px={2}
-                py={1}
-                border='1px solid'
-                borderColor='green.300'
-            >
-                Learn next
-            </Badge>
+            {props.isNext && (
+                <Badge
+                    colorPalette='green'
+                    position='absolute'
+                    top='-3'
+                    right='4'
+                    px={2}
+                    py={1}
+                    border='1px solid'
+                    borderColor='green.300'
+                >
+                    Learn next
+                </Badge>
+            )}
 
             <Flex justify='space-between' gap={4} flex='1 1 auto' pt={1}>
                 <Text fontWeight='semibold'>{props.title}</Text>
                 {props.isLocked && <LockKeyhole color='#2ECC71' />}
+                {props.isCompleted && <CheckCircle color='#2ECC71' />}
             </Flex>
 
             <Flex justify='space-between'>

@@ -10,7 +10,7 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 
 interface CodeEditorProps {
     readonly fileName: string;
-    readonly initialContent?: string;
+    readonly initialContent?: string | null;
     readonly isReadOnly?: boolean;
     readonly minHeight?: string;
 }

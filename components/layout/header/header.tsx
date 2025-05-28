@@ -4,6 +4,7 @@ import { HeaderHeading } from './header-heading';
 
 interface HeaderProps {
     readonly username: string;
+    readonly userId: string;
     readonly level: number | undefined;
 }
 
@@ -43,7 +44,7 @@ export async function Header(props: HeaderProps) {
                     </Flex>
                 )}
 
-                <HeaderDropdown username={props.username} />
+                <HeaderDropdown userId={props.userId} username={props.username} />
             </Flex>
         </Flex>
     );

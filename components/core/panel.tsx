@@ -6,7 +6,7 @@ interface PanelProps {
     readonly title: string;
     readonly steps: { isCompleted: boolean }[];
     readonly children: ReactNode;
-    readonly onSkip: () => Promise<void>;
+    readonly onSkip: () => void;
     readonly isPossibleSkip: boolean;
 }
 

@@ -9,7 +9,6 @@
         "start": "next start",
         "lint": "next lint",
         "seed": "ts-node --project prisma/tsconfig.json prisma/seed.ts",
-        "seed:prod": "NODE_ENV=production ts-node --project prisma/tsconfig.json prisma/seed.ts",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "tsc": "tsc -b"
