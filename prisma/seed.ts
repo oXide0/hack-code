@@ -345,6 +345,133 @@ export async function seedCourses() {
                                 }
                             ]
                         }
+                    },
+                    {
+                        title: 'File Handling',
+                        description: 'Learn to read from and write to files in Python.',
+                        order: 6,
+                        topics: {
+                            create: [
+                                {
+                                    title: 'Reading Files',
+                                    order: 1,
+                                    exercises: {
+                                        create: [
+                                            {
+                                                type: 'THEORY',
+                                                order: 1,
+                                                content: 'Files allow you to store data permanently...',
+                                                codeSample: `# Reading a file\nwith open('data.txt') as file:\n    content = file.read()`
+                                            },
+                                            {
+                                                type: 'PRACTICE',
+                                                order: 2,
+                                                content: 'Write a function that counts lines in a file.',
+                                                starterCode: `def count_lines(filename):\n    # Your code here`,
+                                                solution: `def count_lines(filename):\n    with open(filename) as file:\n        return len(file.readlines())`,
+                                                testCases: {
+                                                    inputs: ['sample.txt'],
+                                                    expectedOutputs: ['5'] // Assuming sample.txt has 5 lines
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    title: 'Writing Files',
+                                    order: 2,
+                                    exercises: {
+                                        create: [
+                                            {
+                                                type: 'THEORY',
+                                                order: 1,
+                                                content: 'Writing to files preserves data after program ends...',
+                                                codeSample: `# Writing to a file\nwith open('output.txt', 'w') as file:\n    file.write('Hello World!')`
+                                            },
+                                            {
+                                                type: 'PRACTICE',
+                                                order: 2,
+                                                content: 'Create a function that writes user data to a CSV file.',
+                                                starterCode: `def save_to_csv(filename, data):\n    # Your code here`,
+                                                solution: `def save_to_csv(filename, data):\n    import csv\n    with open(filename, 'w', newline='') as file:\n        writer = csv.writer(file)\n        writer.writerows(data)`,
+                                                testCases: {
+                                                    inputs: [
+                                                        [
+                                                            'users.csv',
+                                                            [
+                                                                ['Name', 'Age'],
+                                                                ['Alice', 25],
+                                                                ['Bob', 30]
+                                                            ]
+                                                        ]
+                                                    ],
+                                                    expectedOutputs: ['File created successfully']
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        title: 'Object-Oriented Python',
+                        description: 'Learn classes, objects, and OOP principles.',
+                        order: 7,
+                        topics: {
+                            create: [
+                                {
+                                    title: 'Classes & Objects',
+                                    order: 1,
+                                    exercises: {
+                                        create: [
+                                            {
+                                                type: 'THEORY',
+                                                order: 1,
+                                                content: 'Classes are blueprints for creating objects...',
+                                                codeSample: `class Dog:\n    def __init__(self, name):\n        self.name = name\n\n    def bark(self):\n        return "Woof!"`
+                                            },
+                                            {
+                                                type: 'PRACTICE',
+                                                order: 2,
+                                                content: 'Create a BankAccount class with deposit/withdraw methods.',
+                                                starterCode: `class BankAccount:\n    # Your code here`,
+                                                solution: `class BankAccount:\n    def __init__(self, balance=0):\n        self.balance = balance\n    \n    def deposit(self, amount):\n        self.balance += amount\n    \n    def withdraw(self, amount):\n        if amount <= self.balance:\n            self.balance -= amount\n        else:\n            print("Insufficient funds")`,
+                                                testCases: {
+                                                    inputs: [],
+                                                    expectedOutputs: ['Class implemented correctly']
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    title: 'Inheritance',
+                                    order: 2,
+                                    exercises: {
+                                        create: [
+                                            {
+                                                type: 'THEORY',
+                                                order: 1,
+                                                content: 'Inheritance allows creating specialized classes...',
+                                                codeSample: `class Animal:\n    def speak(self):\n        pass\n\nclass Cat(Animal):\n    def speak(self):\n        return "Meow!"`
+                                            },
+                                            {
+                                                type: 'PRACTICE',
+                                                order: 2,
+                                                content: 'Create a Vehicle base class and Car subclass.',
+                                                starterCode: `# Your code here`,
+                                                solution: `class Vehicle:\n    def __init__(self, make, model):\n        self.make = make\n        self.model = model\n\nclass Car(Vehicle):\n    def __init__(self, make, model, num_doors):\n        super().__init__(make, model)\n        self.num_doors = num_doors`,
+                                                testCases: {
+                                                    inputs: [],
+                                                    expectedOutputs: ['Classes implemented correctly']
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
                     }
                 ]
             }

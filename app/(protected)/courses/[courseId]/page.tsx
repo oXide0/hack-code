@@ -105,7 +105,8 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
                             {rowIndex < rows.length - 1 && (
                                 <Flex
                                     justifyContent={rowIndex % 2 === 0 ? 'flex-end' : 'flex-start'}
-                                    pr={rowIndex % 2 === 0 ? '130px' : 'calc(50% - 20px)'}
+                                    pr={rowIndex % 2 === 0 ? '130px' : '0'}
+                                    pl={rowIndex % 2 === 0 ? '0' : '130px'}
                                     pb={2}
                                 >
                                     <Image src='/arrow-down.svg' alt='arrow down' width={12} height={70} />

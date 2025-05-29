@@ -19,7 +19,7 @@ export function SidebarNavigation({ items }: SidebarNavigationProps) {
                     <Flex
                         align='center'
                         gap={4}
-                        color={pathname === `/${item.value}` ? 'green.400' : 'whiteAlpha.900'}
+                        color={pathname === `${item.value}` ? 'green.400' : 'whiteAlpha.900'}
                         _hover={{
                             color: 'green.300'
                         }}

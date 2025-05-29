@@ -15,8 +15,12 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
         <Exercises
             topicId={initialTopic.id}
             exercises={initialTopic.exercises}
-            onSubmit={async ({ topicId }) => {
+            onSubmit={async ({ topicId, exercises }) => {
                 'use server';
+
+                if (exercises.some((exercise) => !exercise.isCompleted)) {
+                    return redirect(`/courses/${courseId}`);
+                }
 
                 await prisma.topic.update({
                     where: { id: topicId },

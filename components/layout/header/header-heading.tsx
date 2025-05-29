@@ -8,7 +8,7 @@ export function HeaderHeading() {
 
     function getHeadingText(pathname: string) {
         if (pathname === '') return 'Languages';
-        if (pathname.includes('/profile')) return 'Profile';
+        if (pathname.includes('/courses')) return 'Learn';
         if (pathname.includes('/challenges')) return 'Challenges';
         return pathname.split('/').pop()?.replace(/-/g, ' ');
     }

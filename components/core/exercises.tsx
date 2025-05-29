@@ -28,6 +28,22 @@ export function Exercises(props: ExercisesProps) {
     const steps = exercises.map((exercise) => ({ isCompleted: exercise.isCompleted }));
     const isLastStep = exercises[index + 1] == null;
 
+    const handleSubmit = () => {
+        const updatedExercises = [...exercises];
+        updatedExercises[index] = {
+            ...updatedExercises[index],
+            isCompleted: true
+        };
+
+        setExercises(updatedExercises);
+
+        if (!isLastStep) {
+            setIndex((prev) => Math.min(prev + 1, exercises.length - 1));
+        } else {
+            props.onSubmit({ exercises: updatedExercises, topicId: props.topicId });
+        }
+    };
+
     if (currentExercise.type === 'THEORY') {
         return (
             <Box pb={10}>
@@ -44,25 +60,7 @@ export function Exercises(props: ExercisesProps) {
                             <Box flex='1 1 auto'>
                                 <MarkdownRenderer content={currentExercise.content} />
                             </Box>
-                            <Button
-                                w='full'
-                                mt={4}
-                                onClick={() => {
-                                    if (!isLastStep) {
-                                        setExercises((prev) => {
-                                            const updatedExercises = [...prev];
-                                            updatedExercises[index] = {
-                                                ...updatedExercises[index],
-                                                isCompleted: true
-                                            };
-                                            return updatedExercises;
-                                        });
-                                        setIndex((prev) => Math.min(prev + 1, exercises.length - 1));
-                                    } else {
-                                        props.onSubmit({ exercises, topicId: props.topicId });
-                                    }
-                                }}
-                            >
+                            <Button w='full' mt={4} onClick={handleSubmit}>
                                 {exercises[index + 1] != null ? 'Next' : 'Submit'}
                                 {exercises[index + 1] != null && <ArrowRight />}
                             </Button>
@@ -97,21 +95,7 @@ export function Exercises(props: ExercisesProps) {
                         <AnswerButtons
                             answers={currentExercise.options as Answers}
                             isLastStep={isLastStep}
-                            onSubmit={async () => {
-                                if (!isLastStep) {
-                                    setExercises((prev) => {
-                                        const updatedExercises = [...prev];
-                                        updatedExercises[index] = {
-                                            ...updatedExercises[index],
-                                            isCompleted: true
-                                        };
-                                        return updatedExercises;
-                                    });
-                                    setIndex((prev) => Math.min(prev + 1, exercises.length - 1));
-                                } else {
-                                    props.onSubmit({ exercises, topicId: props.topicId });
-                                }
-                            }}
+                            onSubmit={handleSubmit}
                         />
                     </Box>
                 </Flex>
@@ -131,25 +115,7 @@ export function Exercises(props: ExercisesProps) {
                     <Box w='full' pt={7}>
                         <PythonEditor fileName='script.py' minHeight='100px' />
                     </Box>
-                    <Button
-                        w='full'
-                        mt={4}
-                        onClick={() => {
-                            if (!isLastStep) {
-                                setExercises((prev) => {
-                                    const updatedExercises = [...prev];
-                                    updatedExercises[index] = {
-                                        ...updatedExercises[index],
-                                        isCompleted: true
-                                    };
-                                    return updatedExercises;
-                                });
-                                setIndex((prev) => Math.min(prev + 1, exercises.length - 1));
-                            } else {
-                                props.onSubmit({ exercises, topicId: props.topicId });
-                            }
-                        }}
-                    >
+                    <Button w='full' mt={4} onClick={handleSubmit}>
                         {exercises[index + 1] != null ? 'Next' : 'Submit'}
                         {exercises[index + 1] != null && <ArrowRight />}
                     </Button>

@@ -9,7 +9,7 @@ export type Answers = { choices: string[]; correctIndex: number };
 interface AnswerButtonsProps {
     readonly answers: Answers;
     readonly isLastStep: boolean;
-    readonly onSubmit: () => Promise<void>;
+    readonly onSubmit: () => void;
 }
 
 export function AnswerButtons(props: AnswerButtonsProps) {
