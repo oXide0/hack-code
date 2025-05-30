@@ -54,7 +54,7 @@ export default function Loading() {
                                             />
                                         </Skeleton>
                                     )}
-                                    <Skeleton height='140px' width='260px' borderRadius='2xl' color='gray.600' />
+                                    <Skeleton height='140px' width='260px' borderRadius='xl' color='gray.600' />
                                 </Flex>
                             ))}
                         </Stack>

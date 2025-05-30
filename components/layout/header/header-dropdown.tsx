@@ -64,7 +64,10 @@ export function HeaderDropdown(props: HeaderDropdownProps) {
                         bg='transparent'
                         borderRadius={0}
                         _hover={{ bg: 'gray.700' }}
-                        onClick={() => router.push(`/profile/${props.userId}`)}
+                        onClick={() => {
+                            router.push(`/profile/${props.userId}`);
+                            setIsDropdownOpen(false);
+                        }}
                     >
                         Profile
                     </Button>

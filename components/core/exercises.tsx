@@ -20,6 +20,7 @@ interface ExercisesProps {
 export function Exercises(props: ExercisesProps) {
     const [exercises, setExercises] = useState<Exercise[]>(props.exercises);
     const [index, setIndex] = useState<number>(0);
+    const [code, setCode] = useState<string>('');
 
     const currentExercise = useMemo<Exercise>(() => {
         return exercises[index];
@@ -113,7 +114,12 @@ export function Exercises(props: ExercisesProps) {
                     </Text>
                     <Heading>{currentExercise.id}</Heading>
                     <Box w='full' pt={7}>
-                        <PythonEditor fileName='script.py' minHeight='100px' />
+                        <PythonEditor
+                            fileName='script.py'
+                            minHeight='100px'
+                            code={code}
+                            onChange={(code) => setCode(code)}
+                        />
                     </Box>
                     <Button w='full' mt={4} onClick={handleSubmit}>
                         {exercises[index + 1] != null ? 'Next' : 'Submit'}

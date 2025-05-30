@@ -10,14 +10,13 @@ import { CheckCircle2, CircleAlert, FileCode, Play } from 'lucide-react';
 import { useState } from 'react';
 
 interface PythonEditorProps {
+    readonly code: string;
+    readonly onChange: (code: string) => void;
     readonly fileName: string;
-    readonly initialContent?: string;
     readonly minHeight?: string;
-    readonly onCodeChange?: (code: string) => void;
 }
 
 export function PythonEditor(props: PythonEditorProps) {
-    const [code, setCode] = useState(props.initialContent ?? '');
     const [output, setOutput] = useState<{ type: 'success' | 'error'; content: string }[]>([]);
     const [isRunning, setIsRunning] = useState(false);
     const { pyodide, isLoading } = usePythonRunner();
@@ -43,7 +42,7 @@ export function PythonEditor(props: PythonEditorProps) {
                 }
             });
 
-            await pyodide.runPython(code);
+            await pyodide.runPython(props.code);
 
             if (consoleOutput.length === 0) {
                 setOutput((prev) => [...prev, { type: 'success', content: 'Code executed successfully (no output)' }]);
@@ -83,7 +82,7 @@ export function PythonEditor(props: PythonEditorProps) {
                         size='sm'
                         colorScheme='green'
                         onClick={runPythonCode}
-                        disabled={isLoading || isRunning || !code.trim()}
+                        disabled={isLoading || isRunning || !props.code.trim()}
                     >
                         {isRunning ? <Spinner size='sm' /> : <Play size={16} />}
                         {isRunning ? 'Running...' : 'Run Code'}
@@ -93,10 +92,10 @@ export function PythonEditor(props: PythonEditorProps) {
 
             <Box bg='gray.800' borderWidth='1px' borderColor='gray.700' borderTopWidth={0}>
                 <CodeMirror
-                    value={code}
+                    value={props.code}
                     minHeight={props.minHeight || '200px'}
                     extensions={[python()]}
-                    onChange={setCode}
+                    onChange={props.onChange}
                     theme={editorTheme}
                     style={{
                         fontSize: '14px',

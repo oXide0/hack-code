@@ -1,8 +1,10 @@
 import { prisma } from '@/lib/prisma';
-import { Avatar, Badge, Box, Card, Flex, Heading, Text, VStack } from '@chakra-ui/react';
+import { Avatar, Badge, Box, Card, Flex, Heading, Table, Tabs, Text, VStack } from '@chakra-ui/react';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
+
+    // Adapted for your new schema: schoolProfile instead of school
     const user = await prisma.user.findUniqueOrThrow({
         where: { id },
         select: {
@@ -10,7 +12,41 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             lastName: true,
             email: true,
             createdAt: true,
-            school: { select: { name: true } }
+            schoolProfile: {
+                select: {
+                    id: true,
+                    classes: {
+                        select: {
+                            id: true,
+                            name: true,
+                            teachers: {
+                                select: {
+                                    id: true,
+                                    user: {
+                                        select: {
+                                            firstName: true,
+                                            lastName: true,
+                                            email: true
+                                        }
+                                    }
+                                }
+                            },
+                            students: {
+                                select: {
+                                    id: true,
+                                    user: {
+                                        select: {
+                                            firstName: true,
+                                            lastName: true,
+                                            email: true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     });
 
@@ -54,9 +90,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                                     {user.firstName} {user.lastName}
                                 </Heading>
 
-                                {user.school && (
+                                {user.schoolProfile && (
                                     <Text fontSize='lg' color='gray.300'>
-                                        {user.school.name}
+                                        {user.firstName} {user.lastName}
                                     </Text>
                                 )}
 
@@ -80,20 +116,93 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 </Flex>
             </Box>
 
-            <Card.Root bg='gray.800' borderWidth='2px' borderColor='gray.700' borderRadius='xl'>
-                <Card.Header>
-                    <Heading size='md'>About</Heading>
-                </Card.Header>
-                <Card.Body>
-                    <Text>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum distinctio praesentium nulla
-                        repellendus porro, qui officia quasi, repudiandae, veniam illum quas debitis sapiente facilis
-                        sint velit nam laudantium error fuga. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Earum distinctio praesentium nulla repellendus porro, qui officia quasi, repudiandae, veniam
-                        illum quas debitis sapiente facilis sint velit nam laudantium error fuga.
-                    </Text>
-                </Card.Body>
-            </Card.Root>
+            <Tabs.Root defaultValue='about' colorPalette='green'>
+                <Tabs.List>
+                    <Tabs.Trigger value='about'>About</Tabs.Trigger>
+                    {user.schoolProfile && <Tabs.Trigger value='classes'>Classes</Tabs.Trigger>}
+                    <Tabs.Indicator />
+                </Tabs.List>
+                <Tabs.Content value='about'>
+                    <Card.Root bg='gray.800' borderWidth='2px' borderColor='gray.700' borderRadius='xl'>
+                        <Card.Header>
+                            <Heading size='md'>About</Heading>
+                        </Card.Header>
+                        <Card.Body>
+                            <Text>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum distinctio praesentium
+                                nulla repellendus porro, qui officia quasi, repudiandae, veniam illum quas debitis
+                                sapiente facilis sint velit nam laudantium error fuga. Lorem ipsum dolor sit amet
+                                consectetur adipisicing elit. Earum distinctio praesentium nulla repellendus porro, qui
+                                officia quasi, repudiandae, veniam illum quas debitis sapiente facilis sint velit nam
+                                laudantium error fuga.
+                            </Text>
+                        </Card.Body>
+                    </Card.Root>
+                </Tabs.Content>
+                <Tabs.Content value='classes'>
+                    <Card.Root bg='gray.800' borderWidth='2px' borderColor='gray.700' borderRadius='xl' mt={4}>
+                        <Card.Header>
+                            <Heading size='md'>Classes</Heading>
+                        </Card.Header>
+                        <Card.Body>
+                            <Table.Root variant='line' size='md'>
+                                <Table.Header>
+                                    <Table.Row>
+                                        <Table.ColumnHeader>Name</Table.ColumnHeader>
+                                        <Table.ColumnHeader>Teachers</Table.ColumnHeader>
+                                        <Table.ColumnHeader>Students</Table.ColumnHeader>
+                                    </Table.Row>
+                                </Table.Header>
+                                <Table.Body>
+                                    {user.schoolProfile?.classes.map((cls) => (
+                                        <Table.Row key={cls.id}>
+                                            <Table.Cell>
+                                                <Text fontWeight='bold'>{cls.name}</Text>
+                                            </Table.Cell>
+                                            <Table.Cell>
+                                                <VStack align='flex-start' gap={1}>
+                                                    {cls.teachers.length > 0 ? (
+                                                        cls.teachers.map((t) => (
+                                                            <Text key={t.id}>
+                                                                {t.user.firstName} {t.user.lastName}
+                                                                <Text as='span' fontSize='xs' color='gray.400' ml={2}>
+                                                                    {t.user.email}
+                                                                </Text>
+                                                            </Text>
+                                                        ))
+                                                    ) : (
+                                                        <Text color='gray.400' fontSize='sm'>
+                                                            –
+                                                        </Text>
+                                                    )}
+                                                </VStack>
+                                            </Table.Cell>
+                                            <Table.Cell>
+                                                <VStack align='flex-start' gap={1}>
+                                                    {cls.students.length > 0 ? (
+                                                        cls.students.map((s) => (
+                                                            <Text key={s.id}>
+                                                                {s.user.firstName} {s.user.lastName}
+                                                                <Text as='span' fontSize='xs' color='gray.400' ml={2}>
+                                                                    {s.user.email}
+                                                                </Text>
+                                                            </Text>
+                                                        ))
+                                                    ) : (
+                                                        <Text color='gray.400' fontSize='sm'>
+                                                            –
+                                                        </Text>
+                                                    )}
+                                                </VStack>
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    ))}
+                                </Table.Body>
+                            </Table.Root>
+                        </Card.Body>
+                    </Card.Root>
+                </Tabs.Content>
+            </Tabs.Root>
         </Box>
     );
 }

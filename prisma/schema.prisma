@@ -21,42 +21,42 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String @id @default(uuid())
+  email     String @unique
   password  String
   firstName String
   lastName  String
   role      Role
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  school   School? @relation(fields: [schoolId], references: [id])
-  schoolId String?
+  schoolId String
 
-  // User can be both teacher and student in different schools (uncommon but possible)
+  schoolProfile  School?
   teacherProfile Teacher?
   studentProfile Student?
-
-  @@unique([email, schoolId])
 }
 
 model School {
-  id        String   @id @default(uuid())
-  name      String
-  address   String?
-  phone     String?
-  email     String?
-  website   String?
+  id   String @id @default(uuid())
+  name String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users    User[]
-  teachers Teacher[]
-  students Student[]
+  adminId String @unique
+  admin   User   @relation(fields: [adminId], references: [id])
+
+  teachers   Teacher[]
+  students   Student[]
+  classes    Class[]
+  challenges Challenge[]
 }
 
 model Teacher {
-  id        String   @id @default(uuid())
+  id String @id @default(uuid())
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -65,12 +65,15 @@ model Teacher {
 
   schoolId String
   school   School @relation(fields: [schoolId], references: [id])
+
+  classes Class[] @relation("ClassTeachers")
 }
 
 model Student {
-  id        String   @id @default(uuid())
-  studentId String   @unique // School-specific student ID
+  id        String @id @default(uuid())
+  studentId String @unique // School-specific student ID
   level     Int
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -79,6 +82,27 @@ model Student {
 
   schoolId String
   school   School @relation(fields: [schoolId], references: [id])
+
+  classes    Class[]     @relation("ClassStudents")
+  challenges Challenge[] @relation("ChallengeStudents")
+  solution   Solution[]
+}
+
+model Class {
+  id   String @id @default(uuid())
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id])
+
+  teachers   Teacher[]   @relation("ClassTeachers")
+  students   Student[]   @relation("ClassStudents")
+  challenges Challenge[] @relation("ChallengeClasses")
+
+  @@index([schoolId, name])
 }
 
 model Course {
@@ -126,6 +150,12 @@ model Topic {
   @@index([sectionId])
 }
 
+enum ExerciseType {
+  THEORY
+  VALIDATION
+  PRACTICE
+}
+
 model Exercise {
   id          String       @id @default(uuid())
   type        ExerciseType
@@ -141,7 +171,6 @@ model Exercise {
   // For coding exercises
   starterCode String?
   solution    String?
-  testCases   Json? // { inputs: any[], expectedOutputs: any[] }
 
   topicId String
   topic   Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
@@ -149,8 +178,35 @@ model Exercise {
   @@index([topicId, order])
 }
 
-enum ExerciseType {
-  THEORY
-  VALIDATION
-  PRACTICE
+model Challenge {
+  id             String  @id @default(uuid())
+  title          String
+  description    String
+  difficulty     Int
+  exampleContent String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  school   School @relation(fields: [schoolId], references: [id])
+  schoolId String
+
+  assignedClasses  Class[]   @relation("ChallengeClasses")
+  assignedStudents Student[] @relation("ChallengeStudents")
+
+  solution Solution[]
+}
+
+model Solution {
+  id   String @id @default(uuid())
+  code String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
 }

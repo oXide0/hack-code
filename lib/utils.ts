@@ -28,3 +28,11 @@ export function chunkArray<T>(arr: T[], size: number): T[][] {
     }
     return result;
 }
+
+export const DIFFICULTY_OPTIONS = [
+    { label: 'All', value: '' },
+    { label: 'Easy (1)', value: '1' },
+    { label: 'Medium (2)', value: '2' },
+    { label: 'Hard (3)', value: '3' },
+    { label: 'Very Hard (4)', value: '4' }
+];
