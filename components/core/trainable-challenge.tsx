@@ -20,7 +20,7 @@ export function TrainableChallenge(props: TrainableChallengeProps) {
     const [solution, setSolution] = useState<string>('');
 
     return (
-        <Flex gap={2} minH='calc(100vh - 100px)' pt={2}>
+        <Flex gap={2} minH='calc(100vh - 181px)' pt={2}>
             <Card.Root
                 w='50%'
                 p={8}
