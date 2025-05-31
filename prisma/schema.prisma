@@ -194,7 +194,7 @@ model Challenge {
   assignedClasses  Class[]   @relation("ChallengeClasses")
   assignedStudents Student[] @relation("ChallengeStudents")
 
-  solution Solution[]
+  solutions Solution[]
 }
 
 model Solution {

@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 await prisma.challenge.update({
                     where: { id: challenge.id },
                     data: {
-                        solution: { create: { code: solution, studentId: identity.studentProfile.id } }
+                        solutions: { create: { code: solution, studentId: identity.studentProfile.id } }
                     }
                 });
             }}
