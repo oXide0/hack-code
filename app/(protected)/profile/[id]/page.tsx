@@ -4,7 +4,6 @@ import { Avatar, Badge, Box, Card, Flex, Heading, Table, Tabs, Text, VStack } fr
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
 
-    // Adapted for your new schema: schoolProfile instead of school
     const user = await prisma.user.findUniqueOrThrow({
         where: { id },
         select: {
