@@ -13,12 +13,13 @@ import {
     Text,
     VStack
 } from '@chakra-ui/react';
-import { Edit, Plus, Trash } from 'lucide-react';
+import { Edit, Plus, Trash, UserPlus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toaster } from '../ui/toaster';
 import { ClassDrawer, ClassFormValues } from './class-drawer';
 import { call } from '@/lib/utils';
+import { InviteDrawer, InviteFormValues } from './invite-drawer';
 
 interface Class {
     readonly id: string;
@@ -46,12 +47,13 @@ interface Class {
 
 interface NetworkTableProps {
     readonly schoolId: string;
-    readonly items: Class[];
+    readonly classes: Class[];
     readonly students: { label: string; value: string }[];
     readonly teachers: { label: string; value: string }[];
     readonly onCreateClass: (args: { data: ClassFormValues; schoolId: string }) => Promise<void>;
     readonly onUpdateClass: (args: { data: ClassFormValues; schoolId: string; classId: string }) => Promise<void>;
     readonly onDeleteClass: (classIds: string[]) => Promise<void>;
+    readonly onInviteUsers: (values: InviteFormValues) => Promise<void>;
 }
 
 export function NetworkTable(props: NetworkTableProps) {
@@ -59,9 +61,10 @@ export function NetworkTable(props: NetworkTableProps) {
     const [selection, setSelection] = useState<string[]>([]);
     const [addClassDrawerOpen, setAddClassDrawerOpen] = useState<boolean>(false);
     const [editClassDrawerOpen, setEditClassDrawerOpen] = useState<{ id: string; open: boolean } | null>(null);
+    const [inviteDrawerOpen, setInviteDrawerOpen] = useState<boolean>(false);
 
     const hasSelection = selection.length > 0;
-    const indeterminate = hasSelection && selection.length < props.items.length;
+    const indeterminate = hasSelection && selection.length < props.classes.length;
 
     return (
         <Stack w='full' gap={4} pt={10}>
@@ -88,7 +91,7 @@ export function NetworkTable(props: NetworkTableProps) {
                     students={props.students}
                     teachers={props.teachers}
                     initialValues={call((): ClassFormValues => {
-                        const targetClass = props.items.find((item) => item.id === editClassDrawerOpen.id);
+                        const targetClass = props.classes.find((item) => item.id === editClassDrawerOpen.id);
                         if (targetClass == null) throw new Error('Class is not found');
                         return {
                             name: targetClass.name,
@@ -108,13 +111,25 @@ export function NetworkTable(props: NetworkTableProps) {
                     }}
                 />
             )}
+            <InviteDrawer
+                open={inviteDrawerOpen}
+                setOpen={setInviteDrawerOpen}
+                onSubmit={(values) => {
+                    props.onInviteUsers(values);
+                    setInviteDrawerOpen(false);
+                    toaster.success({
+                        title: `Invited ${values.variant} successfully`,
+                        closable: true
+                    });
+                }}
+            />
             <Flex justify='space-between' gap={4}>
                 <Heading size='3xl'>Classes</Heading>
                 <Stack direction='row'>
-                    {/* <Button size='sm'>
+                    <Button size='sm' onClick={() => setInviteDrawerOpen(true)}>
                         <UserPlus />
-                        Invite teacher/student
-                    </Button> */}
+                        Invite
+                    </Button>
                     <Button size='sm' onClick={() => setAddClassDrawerOpen(true)}>
                         <Plus />
                         Add class
@@ -131,7 +146,7 @@ export function NetworkTable(props: NetworkTableProps) {
                                 aria-label='Select all rows'
                                 checked={indeterminate ? 'indeterminate' : selection.length > 0}
                                 onCheckedChange={(changes) => {
-                                    setSelection(changes.checked ? props.items.map((item) => item.id) : []);
+                                    setSelection(changes.checked ? props.classes.map((item) => item.id) : []);
                                 }}
                             >
                                 <Checkbox.HiddenInput />
@@ -145,7 +160,7 @@ export function NetworkTable(props: NetworkTableProps) {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {props.items.map((item) => (
+                    {props.classes.map((item) => (
                         <Table.Row
                             key={item.id}
                             data-selected={selection.includes(item.id) ? '' : undefined}

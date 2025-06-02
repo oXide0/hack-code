@@ -1,5 +1,6 @@
 import { NetworkTable } from '@/components/network/network-table';
 import { getIdentity } from '@/hooks/useIdentity';
+import { sendInviteEmail } from '@/lib/email';
 import { prisma } from '@/lib/prisma';
 import { Heading } from '@chakra-ui/react';
 
@@ -27,7 +28,7 @@ export default async function Page() {
     return (
         <NetworkTable
             schoolId={identity.schoolId}
-            items={classes}
+            classes={classes}
             students={students.map((student) => ({
                 label: `${student.user.firstName} ${student.user.lastName}`,
                 value: student.id
@@ -70,6 +71,16 @@ export default async function Page() {
             onDeleteClass={async (classIds) => {
                 'use server';
                 await prisma.class.deleteMany({ where: { id: { in: classIds } } });
+            }}
+            onInviteUsers={async ({ variant, emails }) => {
+                'use server';
+                for (const email of emails) {
+                    await sendInviteEmail({
+                        to: email,
+                        variant: variant,
+                        inviteLink: 'http://localhost:3000/onboarding'
+                    });
+                }
             }}
         />
     );
