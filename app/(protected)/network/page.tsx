@@ -36,7 +36,7 @@ export default async function Page() {
                 label: `${student.user.firstName} ${student.user.lastName}`,
                 value: student.id
             }))}
-            onAddClass={async ({ schoolId, data }) => {
+            onCreateClass={async ({ schoolId, data }) => {
                 'use server';
                 await prisma.class.create({
                     data: {
@@ -47,6 +47,22 @@ export default async function Page() {
                         },
                         teachers: {
                             connect: data.teachers.map((teacherId) => ({ id: teacherId }))
+                        }
+                    }
+                });
+            }}
+            onUpdateClass={async ({ schoolId, data, classId }) => {
+                'use server';
+                await prisma.class.update({
+                    where: { id: classId },
+                    data: {
+                        name: data.name,
+                        schoolId: schoolId,
+                        students: {
+                            set: data.students.map((studentId) => ({ id: studentId }))
+                        },
+                        teachers: {
+                            set: data.teachers.map((teacherId) => ({ id: teacherId }))
                         }
                     }
                 });

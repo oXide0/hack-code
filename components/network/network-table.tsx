@@ -1,11 +1,24 @@
 'use client';
 
-import { ActionBar, Button, Checkbox, Flex, Heading, Portal, Stack, Table, Text, VStack } from '@chakra-ui/react';
-import { Plus, Trash } from 'lucide-react';
+import {
+    ActionBar,
+    Button,
+    Checkbox,
+    Flex,
+    Heading,
+    IconButton,
+    Portal,
+    Stack,
+    Table,
+    Text,
+    VStack
+} from '@chakra-ui/react';
+import { Edit, Plus, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toaster } from '../ui/toaster';
-import { AddClassDrawer, AddClassFormValues } from './add-class-drawer';
+import { ClassDrawer, ClassFormValues } from './class-drawer';
+import { call } from '@/lib/utils';
 
 interface Class {
     readonly id: string;
@@ -36,7 +49,8 @@ interface NetworkTableProps {
     readonly items: Class[];
     readonly students: { label: string; value: string }[];
     readonly teachers: { label: string; value: string }[];
-    readonly onAddClass: (args: { data: AddClassFormValues; schoolId: string }) => Promise<void>;
+    readonly onCreateClass: (args: { data: ClassFormValues; schoolId: string }) => Promise<void>;
+    readonly onUpdateClass: (args: { data: ClassFormValues; schoolId: string; classId: string }) => Promise<void>;
     readonly onDeleteClass: (classIds: string[]) => Promise<void>;
 }
 
@@ -44,19 +58,21 @@ export function NetworkTable(props: NetworkTableProps) {
     const router = useRouter();
     const [selection, setSelection] = useState<string[]>([]);
     const [addClassDrawerOpen, setAddClassDrawerOpen] = useState<boolean>(false);
+    const [editClassDrawerOpen, setEditClassDrawerOpen] = useState<{ id: string; open: boolean } | null>(null);
 
     const hasSelection = selection.length > 0;
     const indeterminate = hasSelection && selection.length < props.items.length;
 
     return (
-        <Stack w='full' gap={2} pt={4}>
-            <AddClassDrawer
+        <Stack w='full' gap={4} pt={10}>
+            <ClassDrawer
                 open={addClassDrawerOpen}
                 setOpen={setAddClassDrawerOpen}
                 students={props.students}
                 teachers={props.teachers}
                 onSubmit={(data) => {
-                    props.onAddClass({ schoolId: props.schoolId, data });
+                    props.onCreateClass({ schoolId: props.schoolId, data });
+                    setAddClassDrawerOpen(false);
                     toaster.success({
                         title: 'Class added successfully',
                         description: `Class "${data.name}" has been added.`,
@@ -65,6 +81,33 @@ export function NetworkTable(props: NetworkTableProps) {
                     router.refresh();
                 }}
             />
+            {editClassDrawerOpen != null && (
+                <ClassDrawer
+                    open={editClassDrawerOpen.open}
+                    setOpen={(value) => setEditClassDrawerOpen({ ...editClassDrawerOpen, open: value })}
+                    students={props.students}
+                    teachers={props.teachers}
+                    initialValues={call((): ClassFormValues => {
+                        const targetClass = props.items.find((item) => item.id === editClassDrawerOpen.id);
+                        if (targetClass == null) throw new Error('Class is not found');
+                        return {
+                            name: targetClass.name,
+                            students: targetClass.students.map((item) => item.id),
+                            teachers: targetClass.teachers.map((item) => item.id)
+                        };
+                    })}
+                    onSubmit={(data) => {
+                        props.onUpdateClass({ classId: editClassDrawerOpen.id, schoolId: props.schoolId, data });
+                        toaster.success({
+                            title: 'Class updated successfully',
+                            description: `Class "${data.name}" has been updated.`,
+                            closable: true
+                        });
+                        setEditClassDrawerOpen(null);
+                        router.refresh();
+                    }}
+                />
+            )}
             <Flex justify='space-between' gap={4}>
                 <Heading size='3xl'>Classes</Heading>
                 <Stack direction='row'>
@@ -98,6 +141,7 @@ export function NetworkTable(props: NetworkTableProps) {
                         <Table.ColumnHeader>Name</Table.ColumnHeader>
                         <Table.ColumnHeader>Teachers</Table.ColumnHeader>
                         <Table.ColumnHeader>Students</Table.ColumnHeader>
+                        <Table.ColumnHeader>Edit</Table.ColumnHeader>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -160,6 +204,16 @@ export function NetworkTable(props: NetworkTableProps) {
                                             –
                                         </Text>
                                     )}
+                                </VStack>
+                            </Table.Cell>
+                            <Table.Cell>
+                                <VStack align='flex-start' gap={1}>
+                                    <IconButton
+                                        size='sm'
+                                        onClick={() => setEditClassDrawerOpen({ id: item.id, open: true })}
+                                    >
+                                        <Edit />
+                                    </IconButton>
                                 </VStack>
                             </Table.Cell>
                         </Table.Row>

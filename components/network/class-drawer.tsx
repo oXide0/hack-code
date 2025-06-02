@@ -9,23 +9,25 @@ import {
     Select,
     Stack
 } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-export interface AddClassFormValues {
+export interface ClassFormValues {
     name: string;
     teachers: string[];
     students: string[];
 }
 
-interface AddClassDrawerProps {
+interface ClassDrawerProps {
     readonly open: boolean;
     readonly setOpen: (open: boolean) => void;
+    readonly initialValues?: ClassFormValues;
     readonly teachers: { label: string; value: string }[];
     readonly students: { label: string; value: string }[];
-    readonly onSubmit: (data: AddClassFormValues) => void;
+    readonly onSubmit: (data: ClassFormValues) => void;
 }
 
-export function AddClassDrawer(props: AddClassDrawerProps) {
+export function ClassDrawer(props: ClassDrawerProps) {
     const teachersCollection = createListCollection({ items: props.teachers });
     const studentsCollection = createListCollection({ items: props.students });
 
@@ -36,18 +38,18 @@ export function AddClassDrawer(props: AddClassDrawerProps) {
         reset,
         setValue,
         formState: { errors, isSubmitting }
-    } = useForm<AddClassFormValues>({
+    } = useForm<ClassFormValues>({
         defaultValues: { name: '', teachers: [], students: [] }
     });
 
-    const handleDrawerClose = () => {
-        props.setOpen(false);
-        reset();
-    };
+    useEffect(() => {
+        if (props.initialValues != null) {
+            reset(props.initialValues);
+        }
+    }, [props.initialValues]);
 
-    const internalSubmit = async (data: AddClassFormValues) => {
+    const internalSubmit = async (data: ClassFormValues) => {
         props.onSubmit(data);
-        handleDrawerClose();
     };
 
     return (
@@ -62,7 +64,7 @@ export function AddClassDrawer(props: AddClassDrawerProps) {
                         <Drawer.Body>
                             <form id='add-class-form' onSubmit={handleSubmit(internalSubmit)}>
                                 <Stack gap={5}>
-                                    <Field.Root invalid={!!errors.name} required>
+                                    <Field.Root invalid={!!errors.name}>
                                         <Field.Label>Name</Field.Label>
                                         <Input
                                             {...register('name', {
@@ -74,7 +76,7 @@ export function AddClassDrawer(props: AddClassDrawerProps) {
                                         <Field.ErrorText>{errors.name && errors.name.message}</Field.ErrorText>
                                     </Field.Root>
 
-                                    <Field.Root required>
+                                    <Field.Root invalid={!!errors.teachers}>
                                         <Controller
                                             control={control}
                                             name='teachers'
@@ -108,6 +110,7 @@ export function AddClassDrawer(props: AddClassDrawerProps) {
                                                             {teachersCollection.items.map((option) => (
                                                                 <Select.Item key={option.value} item={option}>
                                                                     {option.label}
+                                                                    <Select.ItemIndicator />
                                                                 </Select.Item>
                                                             ))}
                                                         </Select.Content>
@@ -119,7 +122,7 @@ export function AddClassDrawer(props: AddClassDrawerProps) {
                                         <Field.ErrorText>{errors.teachers?.message as string}</Field.ErrorText>
                                     </Field.Root>
 
-                                    <Field.Root required>
+                                    <Field.Root invalid={!!errors.students}>
                                         <Controller
                                             control={control}
                                             name='students'
@@ -153,6 +156,7 @@ export function AddClassDrawer(props: AddClassDrawerProps) {
                                                             {studentsCollection.items.map((option) => (
                                                                 <Select.Item key={option.value} item={option}>
                                                                     {option.label}
+                                                                    <Select.ItemIndicator />
                                                                 </Select.Item>
                                                             ))}
                                                         </Select.Content>
@@ -167,7 +171,13 @@ export function AddClassDrawer(props: AddClassDrawerProps) {
                             </form>
                         </Drawer.Body>
                         <Drawer.Footer>
-                            <Button variant='outline' onClick={handleDrawerClose}>
+                            <Button
+                                variant='outline'
+                                onClick={() => {
+                                    props.setOpen(false);
+                                    reset();
+                                }}
+                            >
                                 Cancel
                             </Button>
                             <Button colorScheme='green' type='submit' form='add-class-form' loading={isSubmitting}>
