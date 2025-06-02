@@ -1,4 +1,4 @@
-import { Exercises } from '@/components/core/exercises';
+import { Exercises } from '@/components/courses/exercises';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 

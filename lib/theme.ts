@@ -2,6 +2,10 @@ import { createSystem, defineConfig, defaultConfig } from '@chakra-ui/react';
 
 const config = defineConfig({
     globalCss: {
+        '*': {
+            boxSizing: 'border-box',
+            borderColor: 'gray.600'
+        },
         body: {
             bg: '#1C1C1C',
             fontFamily: 'var(--font-poppins), sans-serif'

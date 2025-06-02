@@ -3,8 +3,8 @@
 import { Box, Button, Card, Flex, Heading, Stack, Text } from '@chakra-ui/react';
 import { Play, SendHorizonal } from 'lucide-react';
 import { useState } from 'react';
-import { CodeEditor } from './code-editor';
-import { PythonEditor } from './python-runner';
+import { CodeEditor } from '../core/code-editor';
+import { PythonEditor } from '../core/python-runner';
 import { toaster } from '../ui/toaster';
 
 interface TrainableChallengeProps {

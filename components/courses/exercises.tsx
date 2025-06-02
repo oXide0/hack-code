@@ -5,11 +5,11 @@ import { Exercise } from '@prisma/client';
 import { ArrowRight } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { AnswerButtons, Answers } from './answer-buttons';
-import { CodeEditor } from './code-editor';
+import { CodeEditor } from '../core/code-editor';
 import { CompletenessSteps } from './completeness-steps';
 import { MarkdownRenderer } from './markdown-renderer';
 import { Panel } from './panel';
-import { PythonEditor } from './python-runner';
+import { PythonEditor } from '../core/python-runner';
 
 interface ExercisesProps {
     readonly topicId: string;

@@ -1,5 +1,5 @@
-import { ChallengeCard } from '@/components/core/challenge-card';
-import { ChallengesFilters } from '@/components/core/challenges-filters';
+import { ChallengeCard } from '@/components/challenges/challenge-card';
+import { ChallengesFilters } from '@/components/challenges/challenges-filters';
 import { getIdentity } from '@/hooks/useIdentity';
 import { prisma, Prisma } from '@/lib/prisma';
 import { Flex } from '@chakra-ui/react';

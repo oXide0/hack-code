@@ -1,4 +1,4 @@
-import { CourseCard } from '@/components/core/course-card';
+import { CourseCard } from '@/components/courses/course-card';
 import { prisma } from '@/lib/prisma';
 import { Container, Grid, Heading, Text, VStack } from '@chakra-ui/react';
 import Link from 'next/link';

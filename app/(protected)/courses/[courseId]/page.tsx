@@ -1,5 +1,5 @@
 import { ConditionalLink } from '@/components/core/conditional-link';
-import { SectionCard } from '@/components/core/section-card';
+import { SectionCard } from '@/components/courses/section-card';
 import { Subheader } from '@/components/layout/subheader/supheader';
 import { prisma } from '@/lib/prisma';
 import { calculateCompleteness, chunkArray } from '@/lib/utils';

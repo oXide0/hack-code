@@ -1,4 +1,4 @@
-import { TrainableChallenge } from '@/components/core/trainable-challenge';
+import { TrainableChallenge } from '@/components/challenges/trainable-challenge';
 import { getIdentity } from '@/hooks/useIdentity';
 import { prisma } from '@/lib/prisma';
 
