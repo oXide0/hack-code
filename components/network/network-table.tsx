@@ -49,7 +49,7 @@ export function NetworkTable(props: NetworkTableProps) {
     const indeterminate = hasSelection && selection.length < props.items.length;
 
     return (
-        <>
+        <Stack w='full' gap={2} pt={4}>
             <AddClassDrawer
                 open={addClassDrawerOpen}
                 setOpen={setAddClassDrawerOpen}
@@ -193,6 +193,6 @@ export function NetworkTable(props: NetworkTableProps) {
                     </ActionBar.Positioner>
                 </Portal>
             </ActionBar.Root>
-        </>
+        </Stack>
     );
 }

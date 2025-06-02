@@ -1,7 +1,7 @@
 import { NetworkTable } from '@/components/network/network-table';
 import { getIdentity } from '@/hooks/useIdentity';
 import { prisma } from '@/lib/prisma';
-import { Heading, Stack } from '@chakra-ui/react';
+import { Heading } from '@chakra-ui/react';
 
 export default async function Page() {
     const identity = await getIdentity();
@@ -25,38 +25,36 @@ export default async function Page() {
     });
 
     return (
-        <Stack w='full' gap={2} pt={4}>
-            <NetworkTable
-                schoolId={identity.schoolId}
-                items={classes}
-                students={students.map((student) => ({
-                    label: `${student.user.firstName} ${student.user.lastName}`,
-                    value: student.id
-                }))}
-                teachers={teachers.map((student) => ({
-                    label: `${student.user.firstName} ${student.user.lastName}`,
-                    value: student.id
-                }))}
-                onAddClass={async ({ schoolId, data }) => {
-                    'use server';
-                    await prisma.class.create({
-                        data: {
-                            name: data.name,
-                            schoolId: schoolId,
-                            students: {
-                                connect: data.students.map((studentId) => ({ id: studentId }))
-                            },
-                            teachers: {
-                                connect: data.teachers.map((teacherId) => ({ id: teacherId }))
-                            }
+        <NetworkTable
+            schoolId={identity.schoolId}
+            items={classes}
+            students={students.map((student) => ({
+                label: `${student.user.firstName} ${student.user.lastName}`,
+                value: student.id
+            }))}
+            teachers={teachers.map((student) => ({
+                label: `${student.user.firstName} ${student.user.lastName}`,
+                value: student.id
+            }))}
+            onAddClass={async ({ schoolId, data }) => {
+                'use server';
+                await prisma.class.create({
+                    data: {
+                        name: data.name,
+                        schoolId: schoolId,
+                        students: {
+                            connect: data.students.map((studentId) => ({ id: studentId }))
+                        },
+                        teachers: {
+                            connect: data.teachers.map((teacherId) => ({ id: teacherId }))
                         }
-                    });
-                }}
-                onDeleteClass={async (classIds) => {
-                    'use server';
-                    await prisma.class.deleteMany({ where: { id: { in: classIds } } });
-                }}
-            />
-        </Stack>
+                    }
+                });
+            }}
+            onDeleteClass={async (classIds) => {
+                'use server';
+                await prisma.class.deleteMany({ where: { id: { in: classIds } } });
+            }}
+        />
     );
 }
