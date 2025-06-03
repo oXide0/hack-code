@@ -1,9 +1,9 @@
 import { NetworkTable } from '@/components/network/network-table';
 import { getIdentity } from '@/hooks/useIdentity';
 import { sendInviteEmail } from '@/lib/email';
+import { getOrigin } from '@/lib/origin';
 import { prisma } from '@/lib/prisma';
 import { Heading } from '@chakra-ui/react';
-import { headers } from 'next/headers';
 
 export default async function Page() {
     const identity = await getIdentity();
@@ -84,10 +84,7 @@ export default async function Page() {
             }}
             onInviteUsers={async ({ data, schoolId }) => {
                 'use server';
-                const headersList = await headers();
-                const host = headersList.get('host');
-                const protocol = headersList.get('x-forwarded-proto') || 'http';
-                const origin = `${protocol}://${host}`;
+                const origin = await getOrigin();
 
                 for (const email of data.emails) {
                     if (data.variant === 'students') {
