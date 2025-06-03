@@ -1,4 +1,5 @@
 import { createTransport } from 'nodemailer';
+import { getOrigin } from './utils';
 
 interface SendInviteEmailArgs {
     readonly to: string;
@@ -31,11 +32,11 @@ export async function sendInviteEmail(args: SendInviteEmailArgs) {
             : "You're invited to join HackCode as a student";
 
     const role = args.variant === 'teachers' ? 'Teacher' : 'Student';
-
+    const origin = await getOrigin();
     const html = `
   <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 520px; margin: auto; background: #181F2A; border-radius: 14px; box-shadow: 0 2px 12px #0002; padding: 36px 28px 28px 28px; color: #fff;">
     <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 28px;">
-      <img src="cid:logo.svg" alt="HackCode Logo" style="height: 48px; width: auto; margin-right: 12px;" />
+       <img src="${origin}/logo.svg" alt="HackCode Logo" style="height: 48px; width: auto; margin-right: 12px;" />
       <span style="font-size: 1.85rem; font-weight: 700; letter-spacing: -1.5px; color: #2ECC71;">HackCode</span>
     </div>
 
@@ -59,7 +60,7 @@ export async function sendInviteEmail(args: SendInviteEmailArgs) {
       </a>
     </div>
 
-    <p style="font-size: 0.97rem; color: #aad1bb; margin-bottom: 28px;">
+    <p style="font-size: 0.97rem; color: #aad1bb !important; margin-bottom: 28px;">
       Or copy and paste this link into your browser:<br />
       <a href="${args.inviteLink}" style="color: #2ECC71; word-break: break-all;">${args.inviteLink}</a>
     </p>
