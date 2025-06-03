@@ -2,7 +2,7 @@ import { NetworkTable } from '@/components/network/network-table';
 import { getIdentity } from '@/hooks/useIdentity';
 import { sendInviteEmail } from '@/lib/email';
 import { prisma } from '@/lib/prisma';
-import { getOrigin } from '@/lib/utils';
+import { getOrigin } from '@/lib/origin';
 import { Heading } from '@chakra-ui/react';
 
 export default async function Page() {

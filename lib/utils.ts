@@ -1,5 +1,4 @@
 import { hash } from 'bcryptjs';
-import { headers } from 'next/headers';
 
 export function calculateCompleteness(items: Array<{ isCompleted: boolean }>): {
     totalItems: number;
@@ -43,10 +42,3 @@ export const DIFFICULTY_OPTIONS = [
 export const hashPassword = async (password: string): Promise<string> => {
     return await hash(password, 12);
 };
-
-export async function getOrigin(): Promise<string> {
-    const headersList = await headers();
-    const host = headersList.get('host');
-    const protocol = headersList.get('x-forwarded-proto') || 'http';
-    return `${protocol}://${host}`;
-}

@@ -1,5 +1,5 @@
 import { createTransport } from 'nodemailer';
-import { getOrigin } from './utils';
+import { getOrigin } from './origin';
 
 interface SendInviteEmailArgs {
     readonly to: string;

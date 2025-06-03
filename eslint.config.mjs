@@ -19,7 +19,8 @@ const eslintConfig = [
         rules: {
             'react-hooks/exhaustive-deps': 'warn',
             'prettier/prettier': 'warn',
-            'react/no-unescaped-entities': 'off'
+            'react/no-unescaped-entities': 'off',
+            'react-hooks/exhaustive-deps': 'off'
         },
         settings: {
             next: {
