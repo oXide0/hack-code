@@ -37,7 +37,6 @@ export async function sendInviteEmail(args: SendInviteEmailArgs) {
   <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 520px; margin: auto; background: #181F2A; border-radius: 14px; box-shadow: 0 2px 12px #0002; padding: 36px 28px 28px 28px; color: #fff;">
     <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 28px;">
        <img src="${origin}/logo.svg" alt="HackCode Logo" style="height: 48px; width: auto; margin-right: 12px;" />
-      <span style="font-size: 1.85rem; font-weight: 700; letter-spacing: -1.5px; color: #2ECC71;">HackCode</span>
     </div>
 
     <h2 style="font-size: 1.45rem; font-weight: 600; margin-bottom: 16px; margin-top: 0; color: #2ECC71;">
