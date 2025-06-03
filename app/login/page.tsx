@@ -1,4 +1,4 @@
-import { LoginForm } from '@/components/forms/login-form';
+import { LoginForm } from '@/components/login/login-form';
 import { Box, Flex, Heading } from '@chakra-ui/react';
 import Image from 'next/image';
 

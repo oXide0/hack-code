@@ -1,3 +1,5 @@
+import { hash } from 'bcryptjs';
+
 export function calculateCompleteness(items: Array<{ isCompleted: boolean }>): {
     totalItems: number;
     completedItems: number;
@@ -36,3 +38,7 @@ export const DIFFICULTY_OPTIONS = [
     { label: 'Hard (3)', value: '3' },
     { label: 'Very Hard (4)', value: '4' }
 ];
+
+export const hashPassword = async (password: string): Promise<string> => {
+    return await hash(password, 12);
+};

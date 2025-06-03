@@ -1,4 +1,4 @@
-import { ChallengeForm } from '@/components/forms/challenge-form';
+import { ChallengeForm } from '@/components/challenges/challenge-form';
 import { getIdentity } from '@/hooks/useIdentity';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';

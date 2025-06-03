@@ -20,13 +20,19 @@ enum Role {
   STUDENT
 }
 
+enum UserStatus {
+  active
+  invited
+}
+
 model User {
-  id        String @id @default(uuid())
-  email     String @unique
+  id        String     @id @default(uuid())
+  email     String     @unique
   password  String
   firstName String
   lastName  String
   role      Role
+  status    UserStatus
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 import { authOptions } from './lib/auth';
 
 const PUBLIC_ROUTES = ['/login'];
-const PROTECTED_ROUTES = ['/courses', '/profile'];
+const PROTECTED_ROUTES = ['/courses', '/profile', '/challenges', '/network'];
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;

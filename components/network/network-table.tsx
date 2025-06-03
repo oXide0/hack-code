@@ -1,5 +1,6 @@
 'use client';
 
+import { call } from '@/lib/utils';
 import {
     ActionBar,
     Button,
@@ -13,12 +14,12 @@ import {
     Text,
     VStack
 } from '@chakra-ui/react';
+import { Role } from '@prisma/client';
 import { Edit, Plus, Trash, UserPlus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toaster } from '../ui/toaster';
 import { ClassDrawer, ClassFormValues } from './class-drawer';
-import { call } from '@/lib/utils';
 import { InviteDrawer, InviteFormValues } from './invite-drawer';
 
 interface Class {
@@ -46,14 +47,17 @@ interface Class {
 }
 
 interface NetworkTableProps {
+    readonly userRole: Role;
     readonly schoolId: string;
     readonly classes: Class[];
     readonly students: { label: string; value: string }[];
     readonly teachers: { label: string; value: string }[];
+    readonly invitedStudents: string[];
+    readonly invitedTeachers: string[];
     readonly onCreateClass: (args: { data: ClassFormValues; schoolId: string }) => Promise<void>;
     readonly onUpdateClass: (args: { data: ClassFormValues; schoolId: string; classId: string }) => Promise<void>;
     readonly onDeleteClass: (classIds: string[]) => Promise<void>;
-    readonly onInviteUsers: (values: InviteFormValues) => Promise<void>;
+    readonly onInviteUsers: (args: { data: InviteFormValues; schoolId: string }) => Promise<void>;
 }
 
 export function NetworkTable(props: NetworkTableProps) {
@@ -71,6 +75,7 @@ export function NetworkTable(props: NetworkTableProps) {
             <ClassDrawer
                 open={addClassDrawerOpen}
                 setOpen={setAddClassDrawerOpen}
+                isAdmin={props.userRole === 'SCHOOL_ADMIN'}
                 students={props.students}
                 teachers={props.teachers}
                 onSubmit={(data) => {
@@ -88,6 +93,7 @@ export function NetworkTable(props: NetworkTableProps) {
                 <ClassDrawer
                     open={editClassDrawerOpen.open}
                     setOpen={(value) => setEditClassDrawerOpen({ ...editClassDrawerOpen, open: value })}
+                    isAdmin={props.userRole === 'SCHOOL_ADMIN'}
                     students={props.students}
                     teachers={props.teachers}
                     initialValues={call((): ClassFormValues => {
@@ -114,8 +120,10 @@ export function NetworkTable(props: NetworkTableProps) {
             <InviteDrawer
                 open={inviteDrawerOpen}
                 setOpen={setInviteDrawerOpen}
+                invitedStudents={props.invitedStudents}
+                invitedTeachers={props.invitedTeachers}
                 onSubmit={(values) => {
-                    props.onInviteUsers(values);
+                    props.onInviteUsers({ data: values, schoolId: props.schoolId });
                     setInviteDrawerOpen(false);
                     toaster.success({
                         title: `Invited ${values.variant} successfully`,
@@ -125,16 +133,18 @@ export function NetworkTable(props: NetworkTableProps) {
             />
             <Flex justify='space-between' gap={4}>
                 <Heading size='3xl'>Classes</Heading>
-                <Stack direction='row'>
-                    <Button size='sm' onClick={() => setInviteDrawerOpen(true)}>
-                        <UserPlus />
-                        Invite
-                    </Button>
-                    <Button size='sm' onClick={() => setAddClassDrawerOpen(true)}>
-                        <Plus />
-                        Add class
-                    </Button>
-                </Stack>
+                {props.userRole === 'SCHOOL_ADMIN' && (
+                    <Stack direction='row'>
+                        <Button size='sm' onClick={() => setInviteDrawerOpen(true)}>
+                            <UserPlus />
+                            Invite
+                        </Button>
+                        <Button size='sm' onClick={() => setAddClassDrawerOpen(true)}>
+                            <Plus />
+                            Add class
+                        </Button>
+                    </Stack>
+                )}
             </Flex>
             <Table.Root borderWidth='2px' borderColor='gray.700' borderRadius='xl'>
                 <Table.Header>

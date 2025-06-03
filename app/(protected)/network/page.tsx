@@ -3,6 +3,7 @@ import { getIdentity } from '@/hooks/useIdentity';
 import { sendInviteEmail } from '@/lib/email';
 import { prisma } from '@/lib/prisma';
 import { Heading } from '@chakra-ui/react';
+import { headers } from 'next/headers';
 
 export default async function Page() {
     const identity = await getIdentity();
@@ -18,25 +19,34 @@ export default async function Page() {
     });
     const students = await prisma.student.findMany({
         where: { schoolId: identity.schoolId },
-        select: { id: true, user: { select: { firstName: true, lastName: true } } }
+        select: { id: true, user: { select: { email: true, firstName: true, lastName: true, status: true } } }
     });
     const teachers = await prisma.teacher.findMany({
         where: { schoolId: identity.schoolId },
-        select: { id: true, user: { select: { firstName: true, lastName: true } } }
+        select: { id: true, user: { select: { email: true, firstName: true, lastName: true, status: true } } }
     });
 
     return (
         <NetworkTable
+            userRole={identity.role}
             schoolId={identity.schoolId}
             classes={classes}
             students={students.map((student) => ({
                 label: `${student.user.firstName} ${student.user.lastName}`,
-                value: student.id
+                value: student.id,
+                status: student.user.status
             }))}
-            teachers={teachers.map((student) => ({
-                label: `${student.user.firstName} ${student.user.lastName}`,
-                value: student.id
+            teachers={teachers.map((teacher) => ({
+                label: `${teacher.user.firstName} ${teacher.user.lastName}`,
+                value: teacher.id,
+                status: teacher.user.status
             }))}
+            invitedStudents={students
+                .filter((student) => student.user.status === 'invited')
+                .map((student) => student.user.email)}
+            invitedTeachers={teachers
+                .filter((teacher) => teacher.user.status === 'invited')
+                .map((teacher) => teacher.user.email)}
             onCreateClass={async ({ schoolId, data }) => {
                 'use server';
                 await prisma.class.create({
@@ -72,14 +82,61 @@ export default async function Page() {
                 'use server';
                 await prisma.class.deleteMany({ where: { id: { in: classIds } } });
             }}
-            onInviteUsers={async ({ variant, emails }) => {
+            onInviteUsers={async ({ data, schoolId }) => {
                 'use server';
-                for (const email of emails) {
-                    await sendInviteEmail({
-                        to: email,
-                        variant: variant,
-                        inviteLink: 'http://localhost:3000/onboarding'
-                    });
+                const headersList = await headers();
+                const host = headersList.get('host');
+                const protocol = headersList.get('x-forwarded-proto') || 'http';
+                const origin = `${protocol}://${host}`;
+
+                for (const email of data.emails) {
+                    if (data.variant === 'students') {
+                        const { id } = await prisma.user.create({
+                            data: {
+                                email,
+                                firstName: '',
+                                lastName: '',
+                                password: '',
+                                role: 'STUDENT',
+                                status: 'invited',
+                                schoolId: schoolId,
+                                studentProfile: {
+                                    create: {
+                                        level: 1,
+                                        studentId: '', // change to real student id of school
+                                        schoolId: schoolId
+                                    }
+                                }
+                            }
+                        });
+                        await sendInviteEmail({
+                            to: email,
+                            variant: data.variant,
+                            inviteLink: `${origin}/onboarding/${id}`
+                        });
+                    } else if (data.variant === 'teachers') {
+                        const { id } = await prisma.user.create({
+                            data: {
+                                email,
+                                firstName: '',
+                                lastName: '',
+                                password: '',
+                                role: 'TEACHER',
+                                status: 'invited',
+                                schoolId: schoolId,
+                                teacherProfile: {
+                                    create: {
+                                        schoolId: schoolId
+                                    }
+                                }
+                            }
+                        });
+                        await sendInviteEmail({
+                            to: email,
+                            variant: data.variant,
+                            inviteLink: `${origin}/onboarding/${id}`
+                        });
+                    }
                 }
             }}
         />

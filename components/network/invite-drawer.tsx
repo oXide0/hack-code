@@ -7,11 +7,12 @@ import {
     IconButton,
     Input,
     Portal,
+    Separator,
     Stack,
     Tabs,
     Text
 } from '@chakra-ui/react';
-import { GraduationCap, Plus, Trash, UserRoundCheck } from 'lucide-react';
+import { GraduationCap, MailCheck, Plus, Trash, UserRoundCheck } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -23,6 +24,8 @@ export interface InviteFormValues {
 interface InviteDrawerProps {
     readonly open: boolean;
     readonly setOpen: (open: boolean) => void;
+    readonly invitedStudents: string[];
+    readonly invitedTeachers: string[];
     readonly onSubmit: (values: InviteFormValues) => void;
 }
 
@@ -43,6 +46,7 @@ export function InviteDrawer(props: InviteDrawerProps) {
     const emails = watch('emails', []);
     const tab = watch('variant', 'teachers');
     const [inputEmail, setInputEmail] = useState('');
+    const invited = tab === 'teachers' ? props.invitedTeachers : props.invitedStudents;
 
     const addEmail = () => {
         if (!inputEmail) return;
@@ -146,6 +150,34 @@ export function InviteDrawer(props: InviteDrawerProps) {
                                                     </HStack>
                                                 ))}
                                             </Stack>
+
+                                            <Separator my={2} />
+                                            <Text fontWeight='semibold' fontSize='sm' mb={1}>
+                                                Already invited {tab === 'teachers' ? 'teachers' : 'students'}:
+                                            </Text>
+                                            {invited && invited.length > 0 ? (
+                                                <Stack gap={1}>
+                                                    {invited.map((email) => (
+                                                        <HStack
+                                                            key={email}
+                                                            bg='gray.800'
+                                                            px={2}
+                                                            py={1}
+                                                            borderRadius='md'
+                                                        >
+                                                            <MailCheck size={16} color='#38A169' />
+                                                            <Text fontSize='sm' color='gray.200'>
+                                                                {email}
+                                                            </Text>
+                                                        </HStack>
+                                                    ))}
+                                                </Stack>
+                                            ) : (
+                                                <Text color='gray.400' fontSize='sm'>
+                                                    No {tab === 'teachers' ? 'teachers' : 'students'} have been invited
+                                                    yet.
+                                                </Text>
+                                            )}
                                         </Stack>
                                     </Box>
                                 </Tabs.Root>

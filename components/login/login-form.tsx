@@ -6,11 +6,11 @@ import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PasswordInput } from '../ui/password-input';
+import { loginSchema } from '@/lib/validation';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-type LoginFormInputs = {
-    email: string;
-    password: string;
-};
+type LoginFormInputs = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -18,7 +18,7 @@ export function LoginForm() {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<LoginFormInputs>();
+    } = useForm<LoginFormInputs>({ resolver: zodResolver(loginSchema) });
 
     const onSubmit = async (data: LoginFormInputs) => {
         setIsLoading(true);
@@ -54,7 +54,7 @@ export function LoginForm() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Field.Root mb={4}>
+            <Field.Root mb={4} invalid={!!errors.email}>
                 <Field.Label>Email address</Field.Label>
                 <Input
                     variant='subtle'
@@ -65,7 +65,7 @@ export function LoginForm() {
                 {errors.email && <Field.ErrorText>{errors.email.message}</Field.ErrorText>}
             </Field.Root>
 
-            <Field.Root mb={6}>
+            <Field.Root mb={6} invalid={!!errors.password}>
                 <Field.Label>Password</Field.Label>
                 <PasswordInput
                     variant='subtle'

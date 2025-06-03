@@ -1,9 +1,5 @@
-import { hash } from 'bcryptjs';
-import { prisma, Role } from '../lib/prisma';
-
-const hashPassword = async (password: string) => {
-    return await hash(password, 12);
-};
+import { prisma, Role, UserStatus } from '../lib/prisma';
+import { hashPassword } from '../lib/utils';
 
 const SCHOOL_ID = 'school-123';
 
@@ -16,7 +12,8 @@ async function seedUsers() {
             firstName: 'Seymour',
             lastName: 'Skinner',
             role: Role.SCHOOL_ADMIN,
-            schoolId: SCHOOL_ID
+            schoolId: SCHOOL_ID,
+            status: 'active'
         },
         select: { id: true }
     });
@@ -36,6 +33,7 @@ async function seedUsers() {
             lastName: 'Krabappel',
             role: Role.TEACHER,
             schoolId: school.id,
+            status: 'active',
             teacherProfile: {
                 create: {
                     schoolId: school.id
@@ -53,6 +51,7 @@ async function seedUsers() {
             lastName: 'Simpson',
             role: Role.STUDENT,
             schoolId: school.id,
+            status: 'active',
             studentProfile: {
                 create: {
                     schoolId: school.id,
@@ -92,7 +91,8 @@ async function seedClasses() {
                 firstName: 'Elizabeth',
                 lastName: 'Hoover',
                 role: Role.TEACHER,
-                schoolId: school.id
+                schoolId: school.id,
+                status: UserStatus.active
             },
             {
                 email: 'seymour.skinner@springfield.edu',
@@ -100,7 +100,8 @@ async function seedClasses() {
                 firstName: 'Seymour',
                 lastName: 'Skinner',
                 role: Role.TEACHER,
-                schoolId: school.id
+                schoolId: school.id,
+                status: UserStatus.active
             }
         ];
 
@@ -149,7 +150,8 @@ async function seedClasses() {
                     firstName: student.firstName,
                     lastName: student.lastName,
                     role: 'STUDENT',
-                    schoolId: school.id
+                    schoolId: school.id,
+                    status: 'active'
                 }
             });
             // Create student profile

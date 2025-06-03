@@ -21,6 +21,7 @@ export interface ClassFormValues {
 interface ClassDrawerProps {
     readonly open: boolean;
     readonly setOpen: (open: boolean) => void;
+    readonly isAdmin: boolean;
     readonly initialValues?: ClassFormValues;
     readonly teachers: { label: string; value: string }[];
     readonly students: { label: string; value: string }[];
@@ -64,7 +65,7 @@ export function ClassDrawer(props: ClassDrawerProps) {
                         <Drawer.Body>
                             <form id='add-class-form' onSubmit={handleSubmit(internalSubmit)}>
                                 <Stack gap={5}>
-                                    <Field.Root invalid={!!errors.name}>
+                                    <Field.Root invalid={!!errors.name} disabled={!props.isAdmin}>
                                         <Field.Label>Name</Field.Label>
                                         <Input
                                             {...register('name', {
@@ -76,7 +77,7 @@ export function ClassDrawer(props: ClassDrawerProps) {
                                         <Field.ErrorText>{errors.name && errors.name.message}</Field.ErrorText>
                                     </Field.Root>
 
-                                    <Field.Root invalid={!!errors.teachers}>
+                                    <Field.Root invalid={!!errors.teachers} disabled={!props.isAdmin}>
                                         <Controller
                                             control={control}
                                             name='teachers'
