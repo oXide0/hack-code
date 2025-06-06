@@ -25,22 +25,20 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 This project includes a seed script to initialize the database with sample data for demonstration and testing purposes. The `seedUsers` function programmatically creates the following entities:
 
 1. **School Admin**  
-   - **Email:** `principal.skinner@springfield.edu`  
-   - **Name:** Seymour Skinner  
-   - **Role:** SCHOOL_ADMIN  
+   - **Email:** `principal.skinner@springfield.edu` 
+   - **Password:** `SecurePassword123!`
+   - **Name:** Seymour Skinner
+   - **Role:** SCHOOL_ADMIN
 
-2. **School**  
-   - **ID:** Matches the admin's `schoolId`  
-   - **Name:** Springfield Elementary  
-   - **Admin:** Linked to the admin user created above.
-
-3. **Teacher**  
-   - **Email:** `edna.krabappel@springfield.edu`  
-   - **Name:** Edna Krabappel  
+2. **Teacher**  
+   - **Email:** `edna.krabappel@springfield.edu`
+   - **Password:** `TeacherPass123!`
+   - **Name:** Edna Krabappel
    - **Role:** TEACHER  
 
-4. **Student**  
-   - **Email:** `bart.simpson@springfield.edu`  
-   - **Name:** Bart Simpson  
+3. **Student**  
+   - **Email:** `bart.simpson@springfield.edu`
+   - **Password:** `StudentPass123!`
+   - **Name:** Bart Simpson
    - **Role:** STUDENT
 
