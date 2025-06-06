@@ -9,14 +9,14 @@ import rehypeSanitize from 'rehype-sanitize';
 import rehypeStringify from 'rehype-stringify';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github-dark.css';
+import { Box } from '@chakra-ui/react';
 
 interface MarkdownRendererProps {
     content: string;
-    className?: string;
 }
 
-export function MarkdownRenderer({ content, className = '' }: MarkdownRendererProps) {
-    const [html, setHtml] = useState('');
+export function MarkdownRenderer({ content }: MarkdownRendererProps) {
+    const [html, setHtml] = useState<string>('');
 
     useEffect(() => {
         const processMarkdown = async () => {
@@ -28,7 +28,7 @@ export function MarkdownRenderer({ content, className = '' }: MarkdownRendererPr
                 .use(rehypeHighlight, {
                     // Syntax highlighting
                     ignoreMissing: true,
-                    aliases: { javascript: ['js'] }
+                    aliases: { python: ['py'] }
                 })
                 .use(rehypeStringify) // Convert AST to HTML string
                 .process(content);
@@ -39,7 +39,5 @@ export function MarkdownRenderer({ content, className = '' }: MarkdownRendererPr
         processMarkdown();
     }, [content]);
 
-    return (
-        <article className={`prose prose-invert max-w-none ${className}`} dangerouslySetInnerHTML={{ __html: html }} />
-    );
+    return <Box maxW='none' dangerouslySetInnerHTML={{ __html: html }} />;
 }
