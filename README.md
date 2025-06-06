@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HackCode
 
 ## Getting Started
 
@@ -20,17 +20,27 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## Seed Data
 
-To learn more about Next.js, take a look at the following resources:
+This project includes a seed script to initialize the database with sample data for demonstration and testing purposes. The `seedUsers` function programmatically creates the following entities:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **School Admin**  
+   - **Email:** `principal.skinner@springfield.edu`  
+   - **Name:** Seymour Skinner  
+   - **Role:** SCHOOL_ADMIN  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **School**  
+   - **ID:** Matches the admin's `schoolId`  
+   - **Name:** Springfield Elementary  
+   - **Admin:** Linked to the admin user created above.
 
-## Deploy on Vercel
+3. **Teacher**  
+   - **Email:** `edna.krabappel@springfield.edu`  
+   - **Name:** Edna Krabappel  
+   - **Role:** TEACHER  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Student**  
+   - **Email:** `bart.simpson@springfield.edu`  
+   - **Name:** Bart Simpson  
+   - **Role:** STUDENT
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
