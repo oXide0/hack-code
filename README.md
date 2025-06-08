@@ -20,7 +20,9 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Staging Seed Data
+## Staging
+
+**URL:**: [https://hack-code.vercel.app](https://hack-code.vercel.app)
 
 1. **School Admin**  
    - **Email:** `admin.school@hackcode.net` 
@@ -41,7 +43,9 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
    - **Role:** STUDENT
 
 
-## Production Seed Data
+## Production
+
+**URL:**: [https://www.hack-code.net](https://www.hack-code.net)
 
 1. **Super Admin**  
    - **Email:** `michaela.vavrova@hackcode.net` 
