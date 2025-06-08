@@ -1,14 +1,17 @@
+import { getIdentity } from '@/hooks/useIdentity';
 import { prisma } from '@/lib/prisma';
 import { Box, Card, Code, Flex, Heading, Separator, Stack, Text } from '@chakra-ui/react';
 import { BrainCog } from 'lucide-react';
 
 export default async function SolutionsPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
+    const identity = await getIdentity();
     const challenge = await prisma.challenge.findUniqueOrThrow({
         where: { id },
         select: {
             title: true,
             solutions: {
+                where: { studentId: identity.studentProfile?.id },
                 orderBy: { createdAt: 'desc' },
                 select: {
                     id: true,
@@ -38,7 +41,7 @@ export default async function SolutionsPage({ params }: { params: Promise<{ id: 
                     Solutions for: <Text color='green.300'>{challenge.title}</Text>
                 </Heading>
             </Flex>
-            <Card.Root variant='outline' boxShadow='md'>
+            <Card.Root variant='outline' boxShadow='md' bg='gray.800'>
                 <Card.Header>
                     <Heading size='md'>Submitted Solutions</Heading>
                 </Card.Header>
@@ -49,7 +52,7 @@ export default async function SolutionsPage({ params }: { params: Promise<{ id: 
                                 No solutions submitted yet.
                             </Text>
                         )}
-                        <Separator />
+                        <Separator borderColor='gray.600' size='md' />
                         {challenge.solutions.map((s) => (
                             <Box key={s.id}>
                                 <Flex justify='space-between' align='center' mb={2}>
@@ -58,7 +61,7 @@ export default async function SolutionsPage({ params }: { params: Promise<{ id: 
                                             ? `${s.student.user.firstName} ${s.student.user.lastName}`
                                             : 'Unknown Student'}
                                     </Text>
-                                    <Text fontSize='sm' color='gray.500'>
+                                    <Text fontSize='sm' color='gray.400'>
                                         {s.createdAt.toLocaleString
                                             ? s.createdAt.toLocaleString()
                                             : new Date(s.createdAt).toLocaleString()}

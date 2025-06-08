@@ -1,25 +1,24 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useDebouncedCallback } from 'use-debounce';
+import { DIFFICULTY_OPTIONS } from '@/lib/utils';
 import {
-    Input,
-    Field,
-    InputGroup,
-    Card,
-    Select,
-    Heading,
-    createListCollection,
-    Portal,
     Button,
-    HStack,
-    Icon,
+    Card,
+    createListCollection,
+    Field,
+    Heading,
+    Input,
+    InputGroup,
+    Portal,
+    Select,
     Stack
 } from '@chakra-ui/react';
-import { Plus, Search as SearchIcon, SortAsc, SortDesc } from 'lucide-react';
-import { DIFFICULTY_OPTIONS } from '@/lib/utils';
+import { Role } from '@prisma/client';
+import { Plus, Search as SearchIcon } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 
-export function ChallengesFilters() {
+export function ChallengesFilters({ role }: { role: Role }) {
     const searchParams = useSearchParams();
     const { replace, push } = useRouter();
     const pathname = usePathname();
@@ -41,13 +40,6 @@ export function ChallengesFilters() {
         } else {
             params.delete('difficulty');
         }
-        replace(`${pathname}?${params.toString()}`);
-    };
-
-    const sort = searchParams.get('sort') || 'new';
-    const handleSortChange = () => {
-        const params = new URLSearchParams(searchParams);
-        params.set('sort', sort === 'new' ? 'old' : 'new');
         replace(`${pathname}?${params.toString()}`);
     };
 
@@ -139,32 +131,13 @@ export function ChallengesFilters() {
                         </Portal>
                     </Select.Root>
                 </Field.Root>
-
-                <Field.Root>
-                    <Field.Label fontWeight='semibold' color='gray.200' mb={1}>
-                        Sort by
-                    </Field.Label>
-                    <HStack mt={1}>
-                        <Button
-                            size='sm'
-                            onClick={handleSortChange}
-                            variant='solid'
-                            borderRadius='lg'
-                            px={4}
-                            colorScheme='green'
-                            aria-label={`Sort by ${sort === 'new' ? 'Oldest' : 'Newest'}`}
-                            fontWeight='semibold'
-                        >
-                            {sort === 'new' ? 'Newest first' : 'Oldest first'}
-                            {sort === 'new' ? <Icon as={SortDesc} boxSize={4} /> : <Icon as={SortAsc} boxSize={4} />}
-                        </Button>
-                    </HStack>
-                </Field.Root>
             </Stack>
-            <Button colorPalette='green' onClick={() => push('/challenges/create')}>
-                <Plus />
-                Create new challenge
-            </Button>
+            {role !== 'STUDENT' && (
+                <Button colorPalette='green' onClick={() => push('/challenges/create')}>
+                    <Plus />
+                    Create new challenge
+                </Button>
+            )}
         </Card.Root>
     );
 }

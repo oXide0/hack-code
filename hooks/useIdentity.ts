@@ -19,7 +19,20 @@ const getUserById = unstable_cache(
                 studentProfile: {
                     select: {
                         id: true,
-                        level: true
+                        level: true,
+                        classes: { select: { id: true } }
+                    }
+                },
+                teacherProfile: {
+                    select: {
+                        id: true,
+                        classes: { select: { id: true } }
+                    }
+                },
+                schoolProfile: {
+                    select: {
+                        id: true,
+                        classes: { select: { id: true } }
                     }
                 }
             }

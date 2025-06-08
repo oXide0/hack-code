@@ -185,14 +185,17 @@ model Exercise {
 }
 
 model Challenge {
-  id             String  @id @default(uuid())
+  id             String   @id @default(uuid())
   title          String
   description    String
   difficulty     Int
+  deadline       DateTime
   exampleContent String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  createdBy String
 
   school   School @relation(fields: [schoolId], references: [id])
   schoolId String

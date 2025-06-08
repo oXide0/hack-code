@@ -1,4 +1,4 @@
-import { prisma, Role, UserStatus } from '../lib/prisma';
+import { Prisma, prisma, Role, UserStatus } from '../lib/prisma';
 import { hashPassword } from '../lib/utils';
 
 const SCHOOL_ID = 'school-123';
@@ -7,7 +7,7 @@ async function seedUsers() {
     // 1. Create school admin
     const user = await prisma.user.create({
         data: {
-            email: 'principal.skinner@springfield.edu',
+            email: 'admin.school@hackcode.net',
             password: await hashPassword('SecurePassword123!'),
             firstName: 'Seymour',
             lastName: 'Skinner',
@@ -27,7 +27,7 @@ async function seedUsers() {
     // 3. Create teacher
     await prisma.user.create({
         data: {
-            email: 'edna.krabappel@springfield.edu',
+            email: 'teacher.school@hackcode.net',
             password: await hashPassword('TeacherPass123!'),
             firstName: 'Edna',
             lastName: 'Krabappel',
@@ -45,7 +45,7 @@ async function seedUsers() {
     // 4. Create student
     await prisma.user.create({
         data: {
-            email: 'bart.simpson@springfield.edu',
+            email: 'student.school@hackcode.net',
             password: await hashPassword('StudentPass123!'),
             firstName: 'Bart',
             lastName: 'Simpson',
@@ -1049,44 +1049,67 @@ async function seedChallenges() {
     const school = await prisma.school.findFirstOrThrow({
         where: {
             id: SCHOOL_ID
-        }
+        },
+        select: { id: true, classes: { select: { id: true } }, students: { select: { id: true } }, adminId: true }
     });
 
-    await prisma.challenge.createMany({
-        data: [
-            {
-                title: 'Sum of Two Numbers',
-                description: 'Write a function that returns the sum of two given numbers.',
-                difficulty: 1,
-                schoolId: school.id
-            },
-            {
-                title: 'Find the Maximum',
-                description: 'Write a function to find the maximum number in an array.',
-                difficulty: 2,
-                schoolId: school.id
-            },
-            {
-                title: 'FizzBuzz',
-                description:
-                    'Write a function that prints the numbers from 1 to 100. But for multiples of three print "Fizz" instead of the number and for the multiples of five print "Buzz". For numbers which are multiples of both three and five print "FizzBuzz".',
-                difficulty: 1,
-                schoolId: school.id
-            },
-            {
-                title: 'Palindrome Checker',
-                description: 'Determine if a given string is a palindrome.',
-                difficulty: 2,
-                schoolId: school.id
-            },
-            {
-                title: 'Factorial',
-                description: 'Write a recursive function to find the factorial of a number.',
-                difficulty: 3,
-                schoolId: school.id
-            }
-        ]
-    });
+    const challenges: Prisma.ChallengeCreateInput[] = [
+        {
+            title: 'Sum of Two Numbers',
+            description: 'Write a function that returns the sum of two given numbers.',
+            difficulty: 1,
+            school: { connect: { id: school.id } },
+            assignedClasses: { connect: school.classes.map(({ id }) => ({ id })) },
+            assignedStudents: { connect: school.students.map(({ id }) => ({ id })) },
+            deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now,,
+            createdBy: school.adminId
+        },
+        {
+            title: 'Find the Maximum',
+            description: 'Write a function to find the maximum number in an array.',
+            difficulty: 2,
+            school: { connect: { id: school.id } },
+            assignedClasses: { connect: school.classes.map(({ id }) => ({ id })) },
+            assignedStudents: { connect: school.students.map(({ id }) => ({ id })) },
+            deadline: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days from now,
+            createdBy: school.adminId
+        },
+        {
+            title: 'FizzBuzz',
+            description:
+                'Write a function that prints the numbers from 1 to 100. But for multiples of three print "Fizz" instead of the number and for the multiples of five print "Buzz". For numbers which are multiples of both three and five print "FizzBuzz".',
+            difficulty: 1,
+            school: { connect: { id: school.id } },
+            assignedClasses: { connect: school.classes.map(({ id }) => ({ id })) },
+            assignedStudents: { connect: school.students.map(({ id }) => ({ id })) },
+            deadline: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days from now,
+            createdBy: school.adminId
+        },
+        {
+            title: 'Palindrome Checker',
+            description: 'Determine if a given string is a palindrome.',
+            difficulty: 2,
+            school: { connect: { id: school.id } },
+            assignedClasses: { connect: school.classes.map(({ id }) => ({ id })) },
+            assignedStudents: { connect: school.students.map(({ id }) => ({ id })) },
+            deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 days from now,
+            createdBy: school.adminId
+        },
+        {
+            title: 'Factorial',
+            description: 'Write a recursive function to find the factorial of a number.',
+            difficulty: 3,
+            school: { connect: { id: school.id } },
+            assignedClasses: { connect: school.classes.map(({ id }) => ({ id })) },
+            assignedStudents: { connect: school.students.map(({ id }) => ({ id })) },
+            deadline: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000), // 21 days from now,
+            createdBy: school.adminId
+        }
+    ];
+
+    for (const challenge of challenges) {
+        await prisma.challenge.create({ data: challenge });
+    }
 
     console.log('Challenges seeded successfully');
 }

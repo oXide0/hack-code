@@ -1,6 +1,6 @@
 'use client';
 
-import { call } from '@/lib/utils';
+import { call, OptionType } from '@/lib/utils';
 import {
     ActionBar,
     Button,
@@ -50,8 +50,8 @@ interface NetworkTableProps {
     readonly userRole: Role;
     readonly schoolId: string;
     readonly classes: Class[];
-    readonly students: { label: string; value: string }[];
-    readonly teachers: { label: string; value: string }[];
+    readonly students: OptionType[];
+    readonly teachers: OptionType[];
     readonly invitedStudents: string[];
     readonly invitedTeachers: string[];
     readonly onCreateClass: (args: { data: ClassFormValues; schoolId: string }) => Promise<void>;

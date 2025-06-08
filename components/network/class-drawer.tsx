@@ -1,3 +1,4 @@
+import { OptionType } from '@/lib/utils';
 import {
     Button,
     CloseButton,
@@ -23,8 +24,8 @@ interface ClassDrawerProps {
     readonly setOpen: (open: boolean) => void;
     readonly isAdmin: boolean;
     readonly initialValues?: ClassFormValues;
-    readonly teachers: { label: string; value: string }[];
-    readonly students: { label: string; value: string }[];
+    readonly teachers: OptionType[];
+    readonly students: OptionType[];
     readonly onSubmit: (data: ClassFormValues) => void;
 }
 

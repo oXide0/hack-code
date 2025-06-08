@@ -42,3 +42,28 @@ export const DIFFICULTY_OPTIONS = [
 export const hashPassword = async (password: string): Promise<string> => {
     return await hash(password, 12);
 };
+
+export function getTimeLeft(deadline: Date): string {
+    const now = new Date();
+    const end = new Date(deadline);
+    const diffMs = end.getTime() - now.getTime();
+
+    if (diffMs <= 0) return 'Time is up';
+
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diffMs / (1000 * 60)) % 60);
+
+    if (days > 0) {
+        return `${days}d ${hours}h left`;
+    } else if (hours > 0) {
+        return `${hours}h ${minutes}m left`;
+    } else {
+        return `${minutes}m left`;
+    }
+}
+
+export interface OptionType {
+    readonly label: string;
+    readonly value: string;
+}
