@@ -78,7 +78,7 @@ model Teacher {
 model Student {
   id        String @id @default(uuid())
   studentId String @unique // School-specific student ID
-  level     Int
+  level     Int    @default(1)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -167,7 +167,7 @@ model Exercise {
   type        ExerciseType
   content     String // Question/text/content
   explanation String? // Explanation after answering
-  codeSample  String? // For coding exercises
+  codeSample  String? // For THEORY/VALIDATION
   order       Int
   isCompleted Boolean      @default(false)
 
