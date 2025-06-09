@@ -8,7 +8,8 @@
         "build:prod": "npx prisma generate && next build",
         "start": "next start",
         "lint": "next lint",
-        "seed": "ts-node --project prisma/tsconfig.json prisma/seed.ts",
+        "seed:stg": "ts-node --project prisma/tsconfig.json prisma/seed.stg.ts",
+        "seed:prod": "ts-node --project prisma/tsconfig.json prisma/seed.prod.ts",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "tsc": "tsc -b"
